@@ -1,36 +1,95 @@
-import '../Home/css/SignUp.css'
-import Header from '../Header'
-import Footer from '../Footer'
-import { Link } from 'react-router'
+import "../Home/css/SignUp.css";
+import Header from "../Header";
+import Footer from "../Footer";
+import { Link, useNavigate } from "react-router";
 
-function SignUp() {
+function SignUp( { welcomeMessage, setWelcomeMessage } ) {
+  const navigate = useNavigate();
+  
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    const userName = event.target.name.value;
+    const userPwd = event.target.pwd.value;
+    const userPwdConfirm = event.target.pwdConfirm.value;
+    const newUser = { userName, userPwd };
 
-    return (
-        <div className='SignUp'>
-        <Header/>
-            <form>
-                <div className='signUpContainer'>
-                    <h1>Sign Up</h1>
+    if (userPwd !== userPwdConfirm) {
+      setWelcomeMessage("Passwords do not match!");
+      return;
+    }
 
-                    <label><b>User Name</b></label>
-                    <input type="text" placeholder="Enter UserName" name="username" required/>
+    try {
+      const response = await fetch("http://localhost:3000/users/signup", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(newUser),
+        credentials: "include",
+      });
 
-                    <label><b>Password</b></label>
-                    <input type="password" placeholder="Enter Password" name="psw" required/>
+      const data = await response.json();
+      setWelcomeMessage(data.message);
 
-                    <label><b>Repeat Password</b></label>
-                    <input type="password" placeholder="Repeat Password" name="psw-repeat" required/>
+      if (response.ok) {
+        navigate('/home');
+      }
+    } catch (error) {
+      console.error("ERROR: Creating a user on front-end -> ", error);
+    }
+  };
 
-                    <div class="clearfix">
-                        <Link to='/'><button type="button" class="cancelbtn">Cancel</button></Link>
-                        <button type="submit" class="signupbtn">Sign Up</button>
-                    </div>
+  return (
+    <div className="SignUp">
+      <Header />
+      <h1>{welcomeMessage}</h1>
+      <form onSubmit={handleSubmit}>
+        <div className="signUpContainer">
+          <h1>Sign Up</h1>
 
-                </div>
-            </form>
-        <Footer/>
+          <label>
+            <b>User Name</b>
+          </label>
+          <input
+            type="text"
+            placeholder="Enter UserName"
+            name="name"
+            required
+          />
+
+          <label>
+            <b>Password</b>
+          </label>
+          <input
+            type="password"
+            placeholder="Enter Password"
+            name="pwd"
+            required
+          />
+
+          <label>
+            <b>Repeat Password</b>
+          </label>
+          <input
+            type="password"
+            placeholder="Repeat Password"
+            name="pwdConfirm"
+            required
+          />
+
+          <div class="clearfix">
+            <Link to="/">
+              <button type="button" class="cancelbtn">
+                Cancel
+              </button>
+            </Link>
+            <button type="submit" class="signupbtn">
+              Sign Up
+            </button>
+          </div>
         </div>
-    )
+      </form>
+      <Footer />
+    </div>
+  );
 }
 
-export default SignUp
+export default SignUp;

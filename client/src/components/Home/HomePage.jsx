@@ -1,20 +1,15 @@
-import '../Home/css/HomePage.css'
-import Header from '../Header'
-import Footer from '../Footer'
-import { Link } from 'react-router'
+import "../Home/css/HomePage.css";
+import Header from "../Header";
+import Footer from "../Footer";
 
-function HomePage() {
-
-    return (
-        <>
-        <Header/>
-        <div className='headerRedirect'>
-                <Link to='signup'><button className='signUpButton'>Sign Up</button></Link>
-                <Link to='login'><button className='loginButton'>Login</button></Link>
-        </div>
-        <Footer/>
-        </>
-    )
+function HomePage({ welcomeMessage }) {
+  return (
+    <>
+      <Header />
+      <h1>{welcomeMessage}</h1>
+      <Footer />
+    </>
+  );
 }
 
-export default HomePage
+export default HomePage;
