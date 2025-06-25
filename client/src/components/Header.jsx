@@ -1,12 +1,11 @@
-import '../components/css/Header.css'
+import "../components/css/Header.css";
 
 function Header() {
-
-    return (
-        <div className='Header'>
-            <div className='headerTitle'>Campus Connect</div>
-        </div>
-    )
+  return (
+    <div className="Header">
+      <div className="headerTitle">Campus Connect</div>
+    </div>
+  );
 }
 
-export default Header
+export default Header;

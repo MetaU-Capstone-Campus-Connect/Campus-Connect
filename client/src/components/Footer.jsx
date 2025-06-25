@@ -1,12 +1,7 @@
-import '../components/css/Footer.css'
+import "../components/css/Footer.css";
 
 function Footer() {
-
-    return (
-        <>
-    
-        </>
-    )
+  return <></>;
 }
 
-export default Footer
+export default Footer;
