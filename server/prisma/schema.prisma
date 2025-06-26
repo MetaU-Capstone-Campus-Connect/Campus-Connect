@@ -10,5 +10,5 @@ datasource db {
 model Users {
   userId            Int      @id @default(autoincrement())
   userName          String   @unique
-  userPwd           String   @unique
+  userPwd           String   
 }

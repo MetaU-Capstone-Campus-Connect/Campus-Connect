@@ -1,17 +1,19 @@
 input[type=text], input[type=password] {
+    border-radius: 15px;
     padding: 12px 20px;
     margin: 8px 0;
     display: inline-block;
-    border: 1px solid #ccc;
     box-sizing: border-box;
+    width: 250px;
 }
 
 button {
-    background-color: #04AA6D;
-    color: white;
+    background-color: #3148F6;
+    border-radius: 10px;
     padding: 14px 20px;
     margin: 8px;
     border: none;
+    color: white;
 }
 
 button:hover {
@@ -19,14 +21,48 @@ button:hover {
     cursor: pointer;
 }
 
+.userNotify {
+    text-align: center;
+    color:rgb(247, 63, 63);
+    font-size: 17px;
+}
+.registerContainer {
+    text-align: center;
+}
+
+.Login {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: white;
+}
+
 .loginContainer {
-    padding: 16px;
+    height: 400px;
+    width: 325px;
+    padding: 40px;
+    border-radius: 10px;
+    background-color: #1C4B8F;
     display: flex;
     flex-wrap: wrap;
     flex-direction: column;
     align-items: center;
+    justify-content: space-around;
+    font-size: 20px;
 }
 
-.registerContainer {
+.welcomeMessage{
+    font-size: 50px;
     text-align: center;
+    margin-top: 150px;
+}
+
+.smallWelcome {
+    font-size: 35px;
 }

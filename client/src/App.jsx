@@ -4,9 +4,13 @@ import { useState } from "react";
 import HomePage from "./components/Home/HomePage";
 import SignUp from "./components/Home/SignUp";
 import Login from "./components/Home/Login";
+import UserProfile from "./components/User/UserProfile";
 
 function App() {
-  const [welcomeMessage, setWelcomeMessage] = useState("");
+  const [loginMessage, setLoginMessage] = useState("");
+  const [signUpMessage, setSignUpMessage] = useState("");
+  const [userName, setUserName] = useState("");
+
   return (
     <>
       <BrowserRouter>
@@ -16,8 +20,9 @@ function App() {
             element={
               <>
                 <Login
-                  welcomeMessage={welcomeMessage}
-                  setWelcomeMessage={setWelcomeMessage}
+                  loginMessage={loginMessage}
+                  setLoginMessage={setLoginMessage}
+                  setUserName={setUserName}
                 />
               </>
             }
@@ -27,8 +32,9 @@ function App() {
             element={
               <>
                 <SignUp
-                  welcomeMessage={welcomeMessage}
-                  setWelcomeMessage={setWelcomeMessage}
+                  signUpMessage={signUpMessage}
+                  setSignUpMessage={setSignUpMessage}
+                  setUserName={setUserName}
                 />
               </>
             }
@@ -37,11 +43,18 @@ function App() {
             path="/home"
             element={
               <>
-                <HomePage welcomeMessage={welcomeMessage} />
+                <HomePage userName={userName} setUserName={setUserName} />
               </>
             }
           />
-          <Route path="/users/:ids" element={<></>} />
+          <Route
+            path="/users/:name"
+            element={
+              <>
+                <UserProfile />
+              </>
+            }
+          />
         </Routes>
       </BrowserRouter>
     </>

@@ -18,7 +18,7 @@ router.post("/users/signup", async (req, res) => {
     if (activeUser) {
       res.status(409).json({
         error: "Error: Username already exists.",
-        message: "Sorry, that username alreadys exists please try again!",
+        message: "⚠️ Username alreadys exists, please try again!",
       });
       return;
     }
@@ -33,6 +33,7 @@ router.post("/users/signup", async (req, res) => {
     res.status(201).json({
       newUser,
       message: `Welcome ${userName} to Campus Connect!`,
+      user: userName,
     });
   } catch (error) {
     console.error("Error: Creating a new user -> ", error);
@@ -55,19 +56,20 @@ router.post("/users/login", async (req, res) => {
     if (!user) {
       return res.status(404).json({
         error: "User not found",
-        message: "Username is incorrect, please try again!",
+        message: "❌ Username is incorrect, please try again!",
       });
     }
     const unHashPwd = await verifyPassword(userPwd, user.userPwd);
     if (!unHashPwd) {
       return res.status(401).json({
         error: "User password not found",
-        message: "Password is incorrect, try again.",
+        message: "❌ Password is incorrect, please try again!",
       });
     }
 
     res.status(200).json({
       message: `Welcome back, ${userName}`,
+      user: userName,
     });
   } catch (error) {
     res.status(500).json({
@@ -76,7 +78,7 @@ router.post("/users/login", async (req, res) => {
   }
 });
 
-// USERS/ID (GET) -> GET A USER ACCOUNT FROM USER UNIQUE ID
+// USERS/ID (GET) -> GET A USER ACCOUNT FROM USER UNIQUE NAME
 router.get("/users/:id", async (req, res) => {
   const userId = parseInt(req.params.id);
   try {
@@ -89,7 +91,7 @@ router.get("/users/:id", async (req, res) => {
   } catch (error) {
     console.error("Error: Fetching a unique user -> ", error);
     res.status(500).json({
-      error: "Error: Fetching a uniuque user.",
+      error: "Error: Fetching a unique user.",
     });
   }
 });
