@@ -2,7 +2,7 @@ import "../Home/css/Login.css";
 import Footer from "../Footer";
 import { Link, useNavigate } from "react-router";
 
-function Login({ loginMessage, setLoginMessage, setUserName }) {
+function Login({ loginMessage, setLoginMessage, setUserName, setUserInfo }) {
   const navigate = useNavigate();
 
   const clearState = () => {
@@ -27,6 +27,7 @@ function Login({ loginMessage, setLoginMessage, setUserName }) {
       setLoginMessage(data.message);
       if (response.ok) {
         setUserName(data.message);
+        setUserInfo(data.user);
         setLoginMessage("");
         navigate("/home");
       }

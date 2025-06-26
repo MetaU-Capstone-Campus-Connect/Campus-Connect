@@ -11,4 +11,9 @@ model Users {
   userId            Int      @id @default(autoincrement())
   userName          String   @unique
   userPwd           String   
+  accountDate       DateTime @default(now())
+  userProfileImg    String?
+  userProfileBanner String?
+  userBio           String?
+  userStatus        String?
 }

@@ -10,6 +10,7 @@ function App() {
   const [loginMessage, setLoginMessage] = useState("");
   const [signUpMessage, setSignUpMessage] = useState("");
   const [userName, setUserName] = useState("");
+  const [userInfo, setUserInfo] = useState("");
 
   return (
     <>
@@ -23,6 +24,7 @@ function App() {
                   loginMessage={loginMessage}
                   setLoginMessage={setLoginMessage}
                   setUserName={setUserName}
+                  setUserInfo={setUserInfo}
                 />
               </>
             }
@@ -35,6 +37,7 @@ function App() {
                   signUpMessage={signUpMessage}
                   setSignUpMessage={setSignUpMessage}
                   setUserName={setUserName}
+                  setUserInfo={setUserInfo}
                 />
               </>
             }
@@ -43,7 +46,10 @@ function App() {
             path="/home"
             element={
               <>
-                <HomePage userName={userName} setUserName={setUserName} />
+                <HomePage
+                  userName={userName}
+                  setUserName={setUserName}
+                />
               </>
             }
           />
@@ -51,7 +57,7 @@ function App() {
             path="/users/:name"
             element={
               <>
-                <UserProfile />
+                <UserProfile userInfo={userInfo}/>
               </>
             }
           />

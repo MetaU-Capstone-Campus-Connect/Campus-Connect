@@ -2,7 +2,7 @@ import "../Home/css/SignUp.css";
 import Footer from "../Footer";
 import { Link, useNavigate } from "react-router";
 
-function SignUp({ signUpMessage, setSignUpMessage, setUserName }) {
+function SignUp({ signUpMessage, setSignUpMessage, setUserName, setUserInfo }) {
   const navigate = useNavigate();
 
   const clearState = () => {
@@ -34,6 +34,7 @@ function SignUp({ signUpMessage, setSignUpMessage, setUserName }) {
 
       if (response.ok) {
         setUserName(data.message);
+        setUserInfo(data.user);
         setSignUpMessage("");
         navigate("/home");
       }

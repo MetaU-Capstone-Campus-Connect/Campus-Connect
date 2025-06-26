@@ -22,7 +22,7 @@ function Header({ setUserName }) {
         </Link>
 
         <Link to="/users/:name">
-          <i className="fa fa-user"></i> Profile
+          <i className="fa fa-user"></i> My Profile
         </Link>
 
         <Link to="/" onClick={handleLogout}>

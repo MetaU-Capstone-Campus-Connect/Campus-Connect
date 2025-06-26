@@ -6,9 +6,7 @@ function HomePage({ userName, setUserName }) {
   return (
     <>
       <Header setUserName={setUserName} />
-      <div className="homePageWelcome">
-        {userName}
-      </div>
+      <div className="homePageWelcome">{userName}</div>
       <Footer />
     </>
   );
