@@ -1,11 +1,13 @@
 import "../Home/css/Login.css";
-import Header from "../Header";
 import Footer from "../Footer";
-// import { useState } from "react";
 import { Link, useNavigate } from "react-router";
 
-function Login({ welcomeMessage, setWelcomeMessage }) {
+function Login({ loginMessage, setLoginMessage, setUserName }) {
   const navigate = useNavigate();
+
+  const clearState = () => {
+    setLoginMessage("");
+  };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -22,8 +24,10 @@ function Login({ welcomeMessage, setWelcomeMessage }) {
       });
 
       const data = await response.json();
-      setWelcomeMessage(data.message);
+      setLoginMessage(data.message);
       if (response.ok) {
+        setUserName(data.message);
+        setLoginMessage("");
         navigate("/home");
       }
     } catch (error) {
@@ -32,43 +36,51 @@ function Login({ welcomeMessage, setWelcomeMessage }) {
   };
 
   return (
-    <div className="Login">
-      <Header />
-      <h1>{welcomeMessage}</h1>
-      <form onSubmit={handleSubmit}>
-        <div className="loginContainer">
-          <label for="uname">
-            <b>Username</b>
-          </label>
-          <input
-            type="text"
-            placeholder="Enter Username"
-            name="name"
-            required
-          />
-
-          <label for="psw">
-            <b>Password</b>
-          </label>
-          <input
-            type="password"
-            placeholder="Enter Password"
-            name="pwd"
-            required
-          />
-
-          <button type="submit">Login</button>
-        </div>
-      </form>
-
-      <div className="registerContainer">
-        <h3>Or Sign Up Using</h3>
-        <Link to="/signup">
-          <button className="createButton">Sign Up</button>
-        </Link>
+    <>
+      <div className="welcomeMessage">
+        Welcome to Campus Connect!
+        <p className="smallWelcome">Sign In</p>
       </div>
-      <Footer />
-    </div>
+      <div className="Login">
+        <form onSubmit={handleSubmit}>
+          <div className="loginContainer">
+            <label>
+              <b>Username</b>
+            </label>
+            <input
+              type="text"
+              placeholder="Enter Username"
+              name="name"
+              required
+            />
+
+            <label>
+              <b>Password</b>
+            </label>
+            <input
+              type="password"
+              placeholder="Enter Password"
+              name="pwd"
+              required
+            />
+
+            <button type="submit">Login</button>
+            <div className="userNotify">
+              <p>
+                <b>{loginMessage}</b>
+              </p>
+            </div>
+            <div className="registerContainer">
+              <h3>Create An Account</h3>
+              <Link to="/signup" onClick={clearState}>
+                <button className="loginSignUpButton">Sign Up</button>
+              </Link>
+            </div>
+          </div>
+        </form>
+        <Footer />
+      </div>
+    </>
   );
 }
 

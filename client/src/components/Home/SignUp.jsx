@@ -1,11 +1,14 @@
 import "../Home/css/SignUp.css";
-import Header from "../Header";
 import Footer from "../Footer";
 import { Link, useNavigate } from "react-router";
 
-function SignUp( { welcomeMessage, setWelcomeMessage } ) {
+function SignUp({ signUpMessage, setSignUpMessage, setUserName }) {
   const navigate = useNavigate();
-  
+
+  const clearState = () => {
+    setSignUpMessage("");
+  };
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     const userName = event.target.name.value;
@@ -14,7 +17,7 @@ function SignUp( { welcomeMessage, setWelcomeMessage } ) {
     const newUser = { userName, userPwd };
 
     if (userPwd !== userPwdConfirm) {
-      setWelcomeMessage("Passwords do not match!");
+      setSignUpMessage("⚠️ Passwords do not match!");
       return;
     }
 
@@ -27,10 +30,12 @@ function SignUp( { welcomeMessage, setWelcomeMessage } ) {
       });
 
       const data = await response.json();
-      setWelcomeMessage(data.message);
+      setSignUpMessage(data.message);
 
       if (response.ok) {
-        navigate('/home');
+        setUserName(data.message);
+        setSignUpMessage("");
+        navigate("/home");
       }
     } catch (error) {
       console.error("ERROR: Creating a user on front-end -> ", error);
@@ -38,57 +43,64 @@ function SignUp( { welcomeMessage, setWelcomeMessage } ) {
   };
 
   return (
-    <div className="SignUp">
-      <Header />
-      <h1>{welcomeMessage}</h1>
-      <form onSubmit={handleSubmit}>
-        <div className="signUpContainer">
-          <h1>Sign Up</h1>
+    <>
+      <div className="welcomeMessage">
+        Welcome to Campus Connect!
+        <p className="smallWelcome">Create An Account</p>
+      </div>
+      <div className="SignUp">
+        <form onSubmit={handleSubmit}>
+          <div className="signUpContainer">
+            <label>
+              <b>Username</b>
+            </label>
+            <input
+              type="text"
+              placeholder="Enter Username"
+              name="name"
+              required
+            />
 
-          <label>
-            <b>User Name</b>
-          </label>
-          <input
-            type="text"
-            placeholder="Enter UserName"
-            name="name"
-            required
-          />
+            <label>
+              <b>Password</b>
+            </label>
+            <input
+              type="password"
+              placeholder="Enter Password"
+              name="pwd"
+              required
+            />
 
-          <label>
-            <b>Password</b>
-          </label>
-          <input
-            type="password"
-            placeholder="Enter Password"
-            name="pwd"
-            required
-          />
+            <label>
+              <b>Repeat Password</b>
+            </label>
+            <input
+              type="password"
+              placeholder="Repeat Password"
+              name="pwdConfirm"
+              required
+            />
 
-          <label>
-            <b>Repeat Password</b>
-          </label>
-          <input
-            type="password"
-            placeholder="Repeat Password"
-            name="pwdConfirm"
-            required
-          />
-
-          <div class="clearfix">
-            <Link to="/">
-              <button type="button" class="cancelbtn">
-                Cancel
+            <div class="clearfix">
+              <Link to="/" onClick={clearState}>
+                <button type="button" class="cancelbtn">
+                  Cancel
+                </button>
+              </Link>
+              <button type="submit" class="signupbtn">
+                Sign Up
               </button>
-            </Link>
-            <button type="submit" class="signupbtn">
-              Sign Up
-            </button>
+            </div>
+            <div className="notifyUser">
+              <p>
+                <b>{signUpMessage}</b>
+              </p>
+            </div>
           </div>
-        </div>
-      </form>
-      <Footer />
-    </div>
+        </form>
+        <Footer />
+      </div>
+    </>
   );
 }
 

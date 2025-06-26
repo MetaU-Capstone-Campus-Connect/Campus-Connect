@@ -1,3 +1,6 @@
-h1 {
-    text-align: center;
+.homePageWelcome {
+    margin-top: 50px;
+    justify-content: center;
+    display: flex;
+    font-size: 50px;
 }
