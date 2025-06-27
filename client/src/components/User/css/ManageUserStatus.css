@@ -1,0 +1,55 @@
+.modalOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+}
+
+.modalContent {
+    background: #1C4B8F;
+    padding: 20px;
+    width: 400px;
+    height: 300px;
+    border-radius: 8px;
+    text-align: center;
+    color: white;
+}
+
+.exitButton {
+    display: flex;
+    flex-wrap: wrap;
+    margin-left: auto;
+    background-color: transparent;
+    border: none;
+    font-size: 30px;
+    color: white;
+}
+
+.manageStatus {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.onlineButton {
+    background-color: green;
+}
+
+.busyButton {
+    background-color: orange;
+}
+
+.dndButton {
+    background-color: darkred;
+}
+
+.offlineButton {
+    background-color: grey;
+}

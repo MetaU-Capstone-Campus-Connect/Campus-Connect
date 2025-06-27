@@ -1,0 +1,76 @@
+.UserProfile {
+    display: flex;
+    flex-wrap: wrap;
+    margin-top: 25px;
+}
+
+.userInfoUpper {
+    width: 1500px;
+    height: 350px;
+}
+
+.userPics {
+    display: grid;
+    grid-template-columns: 1fr;
+}
+
+.userPics div {
+    grid-row-start: 1;
+    grid-column-start: 1;
+}
+
+.userImg {
+    padding: 15px;
+    border-radius: 50%;
+}
+
+.userBanner {
+    border-radius: 15px;
+}
+
+.userInfoColumn {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    height: 100vh;
+    border-top: 3px solid #1C2127;
+    border-right: 3px solid #1C2127;
+    border-radius: 3px;
+    width: 225px;
+    align-items: center;
+}
+
+.userInfoRow {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    margin-left: 50px;
+}
+
+.userInfoUpper {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+}
+
+.userInfoLower {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    margin-top: 50px;
+    justify-content: space-between;
+}
+
+.userGroups {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    padding-left: 250px;
+}
+
+.userActivity {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    padding-right: 250px;
+}

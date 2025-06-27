@@ -28,6 +28,11 @@ router.post("/users/signup", async (req, res) => {
       data: {
         userName,
         userPwd: hashPwd,
+        userProfileImg:
+          "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/Default_pfp.svg/680px-Default_pfp.svg.png?20220226140232",
+        userProfileBanner:
+          "https://www.altavia.hu/wp-content/uploads/2020/11/Hero-Banner-Placeholder-Light-1024x480-1.png",
+        userBio: "New to Campus Connect!",
       },
     });
     res.status(201).json({
@@ -78,13 +83,13 @@ router.post("/users/login", async (req, res) => {
   }
 });
 
-// USERS/ID (GET) -> GET A USER ACCOUNT FROM USER UNIQUE NAME
-router.get("/users/:id", async (req, res) => {
-  const userId = parseInt(req.params.id);
+// GET SELF USER PROFILE
+router.get("/users/:name", async (req, res) => {
+  const userName = req.params.name;
   try {
     const user = await prisma.users.findUnique({
       where: {
-        userId: userId,
+        userName: userName,
       },
     });
     res.json(user);
