@@ -1,8 +1,10 @@
 import "../Home/css/SignUp.css";
 import Footer from "../Footer";
 import { Link, useNavigate } from "react-router";
+import { useState } from "react";
 
-function SignUp({ signUpMessage, setSignUpMessage, setUserName, setUserInfo }) {
+function SignUp({ setUserName, setUserInfo }) {
+  const [signUpMessage, setSignUpMessage] = useState("");
   const navigate = useNavigate();
 
   const clearState = () => {

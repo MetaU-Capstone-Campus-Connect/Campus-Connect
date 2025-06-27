@@ -38,7 +38,15 @@ router.post("/users/signup", async (req, res) => {
     res.status(201).json({
       newUser,
       message: `Welcome ${userName} to Campus Connect!`,
-      user: userName,
+      user: {
+        userID: newUser.id,
+        userName: newUser.userName,
+        accountDate: newUser.accountDate,
+        userProfileImg: newUser.userProfileImg,
+        userProfileBanner: newUser.userProfileBanner,
+        userBio: newUser.userBio,
+        userStatus: newUser.userStatus,
+      },
     });
   } catch (error) {
     console.error("Error: Creating a new user -> ", error);
@@ -64,8 +72,8 @@ router.post("/users/login", async (req, res) => {
         message: "❌ Username is incorrect, please try again!",
       });
     }
-    const unHashPwd = await verifyPassword(userPwd, user.userPwd);
-    if (!unHashPwd) {
+    const isVerifiedPassword = await verifyPassword(userPwd, user.userPwd);
+    if (!isVerifiedPassword) {
       return res.status(401).json({
         error: "User password not found",
         message: "❌ Password is incorrect, please try again!",
@@ -74,7 +82,15 @@ router.post("/users/login", async (req, res) => {
 
     res.status(200).json({
       message: `Welcome back, ${userName}`,
-      user: userName,
+      user: {
+        userID: user.id,
+        userName: user.userName,
+        accountDate: user.accountDate,
+        userProfileImg: user.userProfileImg,
+        userProfileBanner: user.userProfileBanner,
+        userBio: user.userBio,
+        userStatus: user.userStatus,
+      },
     });
   } catch (error) {
     res.status(500).json({

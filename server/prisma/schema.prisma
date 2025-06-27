@@ -15,5 +15,12 @@ model Users {
   userProfileImg    String?
   userProfileBanner String?
   userBio           String?
-  userStatus        String?
+  userStatus        STATUS   @default(ONLINE)
+}
+
+enum STATUS {
+  ONLINE
+  BUSY
+  DND
+  OFFLIE
 }
