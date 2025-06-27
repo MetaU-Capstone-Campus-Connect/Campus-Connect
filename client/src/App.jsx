@@ -7,8 +7,6 @@ import Login from "./components/Home/Login";
 import UserProfile from "./components/User/UserProfile";
 
 function App() {
-  const [loginMessage, setLoginMessage] = useState("");
-  const [signUpMessage, setSignUpMessage] = useState("");
   const [userName, setUserName] = useState("");
   const [userInfo, setUserInfo] = useState("");
 
@@ -20,12 +18,7 @@ function App() {
             path="/"
             element={
               <>
-                <Login
-                  loginMessage={loginMessage}
-                  setLoginMessage={setLoginMessage}
-                  setUserName={setUserName}
-                  setUserInfo={setUserInfo}
-                />
+                <Login setUserName={setUserName} setUserInfo={setUserInfo} />
               </>
             }
           />
@@ -33,12 +26,7 @@ function App() {
             path="/signup"
             element={
               <>
-                <SignUp
-                  signUpMessage={signUpMessage}
-                  setSignUpMessage={setSignUpMessage}
-                  setUserName={setUserName}
-                  setUserInfo={setUserInfo}
-                />
+                <SignUp setUserName={setUserName} setUserInfo={setUserInfo} />
               </>
             }
           />
@@ -46,10 +34,7 @@ function App() {
             path="/home"
             element={
               <>
-                <HomePage
-                  userName={userName}
-                  setUserName={setUserName}
-                />
+                <HomePage userName={userName} setUserName={setUserName} />
               </>
             }
           />
@@ -57,7 +42,7 @@ function App() {
             path="/users/:name"
             element={
               <>
-                <UserProfile userInfo={userInfo}/>
+                <UserProfile userInfo={userInfo} />
               </>
             }
           />

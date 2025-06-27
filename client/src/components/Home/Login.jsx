@@ -1,8 +1,10 @@
 import "../Home/css/Login.css";
 import Footer from "../Footer";
 import { Link, useNavigate } from "react-router";
+import { useState } from "react";
 
-function Login({ loginMessage, setLoginMessage, setUserName, setUserInfo }) {
+function Login({ setUserName, setUserInfo }) {
+  const [loginMessage, setLoginMessage] = useState("");
   const navigate = useNavigate();
 
   const clearState = () => {
