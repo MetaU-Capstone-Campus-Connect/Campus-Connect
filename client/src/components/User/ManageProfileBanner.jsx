@@ -1,8 +1,9 @@
 import "../User/css/ManageProfileBanner.css";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-function ManageProfileBanner() {
+function ManageProfileBanner({ userInfo, setBannerUrl }) {
   const [modalStatus, setModalStatus] = useState(false);
+  const userName = userInfo.userName;
 
   const handleOpen = () => {
     setModalStatus(true);
@@ -12,15 +13,35 @@ function ManageProfileBanner() {
     setModalStatus(false);
   };
 
+  const handleUpdate = async (event) => {
+    event.preventDefault();
+    const bannerURL = event.target.bannerURL.value;
+
+    try {
+      const response = await fetch(
+        `http://localhost:3000/users/${userName}/banner`,
+        {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ userProfileBanner: bannerURL }),
+        },
+      );
+      if (response.ok) {
+        handleClose();
+        setBannerUrl(bannerURL);
+      }
+    } catch (error) {
+      console.error("ERROR: Updating user profile banner-> ", error);
+    }
+  };
+
   return (
     <div className="ManageProfileBanner">
-      <button onClick={handleOpen}>
-        Change Profile Banner
-      </button>
+      <button onClick={handleOpen}>Change Profile Banner</button>
       {modalStatus && (
         <div className="modalOverlay">
           <div className="modalContent">
-            <form>
+            <form onSubmit={handleUpdate}>
               <button className="exitButton" onClick={handleClose}>
                 <i className="fa fa-close"></i>
               </button>

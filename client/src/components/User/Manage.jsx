@@ -5,7 +5,13 @@ import ManageProfileImg from "./ManageProfileImg";
 import ManageUserStatus from "./ManageUserStatus";
 import ManageUserBio from "./ManageUserBio";
 
-function Manage() {
+function Manage({
+  userInfo,
+  setBannerUrl,
+  setProfileUrl,
+  setStatus,
+  setAboutMe,
+}) {
   const [modalStatus, setModalStatus] = useState(false);
 
   const handleOpen = () => {
@@ -27,10 +33,26 @@ function Manage() {
             </button>
             <h2>Manage Profile</h2>
             <div className="manageStatus">
-              <ManageProfileBanner onClick={console.log("TEST")} />
-              <ManageProfileImg onClick={handleClose} />
-              <ManageUserStatus onClick={handleClose} />
-              <ManageUserBio onClick={handleClose} />
+              <ManageProfileBanner
+                onClick={handleClose}
+                userInfo={userInfo}
+                setBannerUrl={setBannerUrl}
+              />
+              <ManageProfileImg
+                onClick={handleClose}
+                userInfo={userInfo}
+                setProfileUrl={setProfileUrl}
+              />
+              <ManageUserStatus
+                onClick={handleClose}
+                userInfo={userInfo}
+                setStatus={setStatus}
+              />
+              <ManageUserBio
+                onClick={handleClose}
+                userInfo={userInfo}
+                setAboutMe={setAboutMe}
+              />
             </div>
           </div>
         </div>

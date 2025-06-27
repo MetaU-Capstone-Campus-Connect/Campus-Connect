@@ -15,6 +15,7 @@
     "cors": "^2.8.5",
     "express": "^5.1.0",
     "express-session": "^1.18.1",
+    "express-sessions": "^1.0.6",
     "pg": "^8.16.2"
   },
   "devDependencies": {

@@ -2,10 +2,10 @@ import "../Home/css/HomePage.css";
 import Header from "../Header";
 import Footer from "../Footer";
 
-function HomePage({ userName, setUserName }) {
+function HomePage({ userName}) {
   return (
     <>
-      <Header setUserName={setUserName} />
+      <Header/>
       <div className="homePageWelcome">{userName}</div>
       <Footer />
     </>
