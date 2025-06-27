@@ -34,7 +34,7 @@ function App() {
             path="/home"
             element={
               <>
-                <HomePage userName={userName} setUserName={setUserName} />
+                <HomePage userName={userName}/>
               </>
             }
           />

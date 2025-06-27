@@ -1,8 +1,9 @@
 import "../User/css/ManageUserStatus.css";
 import { useState } from "react";
 
-function ManageUserStatus() {
+function ManageUserStatus({ userInfo, setStatus }) {
   const [modalStatus, setModalStatus] = useState(false);
+  const userName = userInfo.userName;
 
   const handleOpen = () => {
     setModalStatus(true);
@@ -10,6 +11,25 @@ function ManageUserStatus() {
 
   const handleClose = () => {
     setModalStatus(false);
+  };
+
+  const handleUpdate = async (status) => {
+    try {
+      const response = await fetch(
+        `http://localhost:3000/users/${userName}/status`,
+        {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ userStatus: status }),
+        },
+      );
+      if (response.ok) {
+        handleClose();
+        setStatus(status);
+      }
+    } catch (error) {
+      console.error("ERROR: Updating user profile img-> ", error);
+    }
   };
 
   return (
@@ -24,16 +44,36 @@ function ManageUserStatus() {
             <h2>Update Profile Status</h2>
             <div className="manageStatus">
               <div>
-                <button className="onlineButton">Online</button>
+                <button
+                  className="onlineButton"
+                  onClick={() => handleUpdate("ONLINE")}
+                >
+                  Online
+                </button>
               </div>
               <div>
-                <button className="busyButton">Busy</button>
+                <button
+                  className="busyButton"
+                  onClick={() => handleUpdate("BUSY")}
+                >
+                  Busy
+                </button>
               </div>
               <div>
-                <button className="dndButton">Do Not Disturb</button>
+                <button
+                  className="dndButton"
+                  onClick={() => handleUpdate("DND")}
+                >
+                  Do Not Disturb
+                </button>
               </div>
               <div>
-                <button className="offlineButton">Offline</button>
+                <button
+                  className="offlineButton"
+                  onClick={() => handleUpdate("OFFLINE")}
+                >
+                  Offline
+                </button>
               </div>
             </div>
           </div>

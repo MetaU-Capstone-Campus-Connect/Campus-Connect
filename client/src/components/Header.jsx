@@ -1,16 +1,13 @@
 import "../components/css/Header.css";
 import { Link } from "react-router";
 
-function Header({ setUserName }) {
-  // const handleLogout = () => {
-  //   setUserName("");
-  // };
+function Header() {
 
   const headers = [
     { name: "Campus Connect", path: "/home", icon: "fa fa-fw fa-home" },
     { name: "Study Groups", path: "/study-groups", icon: "fa fa-group" },
     { name: "Events", path: "/events", icon: "fa fa-calendar" },
-    { name: "My Profile", path: "/users/:name", icon: "fa fa-user" },
+    { name: "My Profile", path: `/users/$`, icon: "fa fa-user" },
     { name: "Log Out", path: "/", icon: "fa fa-sign-out"},
   ];
 

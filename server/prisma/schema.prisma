@@ -22,5 +22,5 @@ enum STATUS {
   ONLINE
   BUSY
   DND
-  OFFLIE
+  OFFLINE
 }
