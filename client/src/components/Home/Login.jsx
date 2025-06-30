@@ -28,7 +28,7 @@ function Login({ setUserName, setUserInfo }) {
       const data = await response.json();
       setLoginMessage(data.message);
       if (response.ok) {
-        setUserName(data.message);
+        setUserName(data.user.userName);
         setUserInfo(data.user);
         setLoginMessage("");
         navigate("/home");

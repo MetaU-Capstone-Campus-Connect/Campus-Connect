@@ -35,7 +35,7 @@ function SignUp({ setUserName, setUserInfo }) {
       setSignUpMessage(data.message);
 
       if (response.ok) {
-        setUserName(data.message);
+        setUserName(data.user.userName);
         setUserInfo(data.user);
         setSignUpMessage("");
         navigate("/home");
