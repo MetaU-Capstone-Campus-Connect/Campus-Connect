@@ -5,6 +5,11 @@ import Manage from "./Manage";
 import { useState, useEffect } from "react";
 
 function UserProfile({ userInfo }) {
+  if (!userInfo) {
+    return <div>LOADING...</div>;
+    // Add error page component
+  }
+
   const [bannerUrl, setBannerUrl] = useState(userInfo.userProfileBanner);
   const [profileUrl, setProfileUrl] = useState(userInfo.userProfileImg);
   const [status, setStatus] = useState(userInfo.userStatus);
