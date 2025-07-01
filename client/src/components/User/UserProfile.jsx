@@ -62,7 +62,7 @@ function UserProfile({ userInfo }) {
             <div className="userPics">
               <div className="bannerImg">
                 <img
-                  src={bannerUrl}
+                  src={bannerUrl || "/src/assets/default-banner.png"}
                   className="userBanner"
                   alt="userBanner"
                   width="1500"
@@ -71,7 +71,7 @@ function UserProfile({ userInfo }) {
               </div>
               <div className="profileImg">
                 <img
-                  src={profileUrl}
+                  src={profileUrl || "/src/assets/default-profile.avif"}
                   className="userImg"
                   alt="userImg"
                   width="200"

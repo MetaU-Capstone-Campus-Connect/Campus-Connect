@@ -5,6 +5,7 @@ const cors = require("cors");
 const PORT = 3000;
 const users = require("./routes/users");
 const auth = require("./routes/auth");
+const map = require("./routes/map")
 app.use(express.json());
 
 app.use(
@@ -28,6 +29,7 @@ app.use(
 
 app.use("/", users);
 app.use("/", auth);
+app.use("/", map);
 
 app.listen(PORT, () => {
   console.log(`SERVER IS RUNNING & ONLINE @ ${PORT}`);

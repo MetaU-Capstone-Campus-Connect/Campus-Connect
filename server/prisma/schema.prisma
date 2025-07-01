@@ -18,6 +18,15 @@ model Users {
   userStatus        STATUS   @default(ONLINE)
 }
 
+model Map {
+  mapId             Int      @id @default(autoincrement())
+  mapUserName       String         
+  mapLong           Float
+  mapLat            Float
+  createTime        DateTime @default(now())
+  message           String?
+}
+
 enum STATUS {
   ONLINE
   BUSY
