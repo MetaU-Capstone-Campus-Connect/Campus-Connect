@@ -28,10 +28,7 @@ router.post("/users/signup", async (req, res) => {
       data: {
         userName,
         userPwd: hashPwd,
-        userProfileImg:
-          "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/Default_pfp.svg/680px-Default_pfp.svg.png?20220226140232",
-        userProfileBanner:
-          "https://www.altavia.hu/wp-content/uploads/2020/11/Hero-Banner-Placeholder-Light-1024x480-1.png",
+        userStatus: "ONLINE",
         userBio: "New to Campus Connect!",
       },
     });

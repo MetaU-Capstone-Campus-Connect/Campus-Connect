@@ -84,7 +84,7 @@ function SignUp({ setUserName, setUserInfo }) {
               required
             />
 
-            <div class="clearfix">
+            <div className="returnToLogin">
               <Link to="/" onClick={clearState}>
                 <button type="button" class="cancelbtn">
                   Cancel

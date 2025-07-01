@@ -1,6 +1,22 @@
 .homePageWelcome {
-    margin-top: 50px;
+    margin-top: 15px;
     justify-content: center;
     display: flex;
     font-size: 50px;
+    margin-bottom: 15px;
+}
+.mapContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.heatMap {
+    height: 70vh;
+    width: 70%;
+}
+
+.setLocationButton {
+    text-align: center;
+    margin-bottom: 15px;
 }
