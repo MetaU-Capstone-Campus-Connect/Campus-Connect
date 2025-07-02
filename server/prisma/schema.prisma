@@ -10,21 +10,30 @@ datasource db {
 model Users {
   userId            Int      @id @default(autoincrement())
   userName          String   @unique
-  userPwd           String   
+  userPwd           String
   accountDate       DateTime @default(now())
   userProfileImg    String?
   userProfileBanner String?
   userBio           String?
   userStatus        STATUS   @default(ONLINE)
+  Groups            Groups[] @relation("GroupMember")
 }
 
 model Map {
-  mapId             Int      @id @default(autoincrement())
-  mapUserName       String         
-  mapLong           Float
-  mapLat            Float
-  createTime        DateTime @default(now())
-  message           String?
+  mapId       Int      @id @default(autoincrement())
+  mapUserName String
+  mapLong     Float
+  mapLat      Float
+  createTime  DateTime @default(now())
+  message     String?
+}
+
+model Groups {
+  groupId      Int     @id @default(autoincrement())
+  groupName    String
+  groupInfo    String
+  groupImg     String
+  groupMembers Users[] @relation("GroupMember")
 }
 
 enum STATUS {

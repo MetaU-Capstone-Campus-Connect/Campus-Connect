@@ -25,14 +25,6 @@ function UserProfile({ userInfo }) {
     return new Date(release_date).toLocaleDateString(undefined, options);
   };
 
-  useEffect(() => {}, [bannerUrl]);
-
-  useEffect(() => {}, [profileUrl]);
-
-  useEffect(() => {}, [status]);
-
-  useEffect(() => {}, [aboutMe]);
-
   return (
     <>
       <Header />

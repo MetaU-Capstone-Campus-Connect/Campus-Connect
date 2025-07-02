@@ -6,6 +6,7 @@ const PORT = 3000;
 const users = require("./routes/users");
 const auth = require("./routes/auth");
 const map = require("./routes/map")
+const groups = require("./routes/groups")
 app.use(express.json());
 
 app.use(
@@ -30,6 +31,7 @@ app.use(
 app.use("/", users);
 app.use("/", auth);
 app.use("/", map);
+app.use("/", groups)
 
 app.listen(PORT, () => {
   console.log(`SERVER IS RUNNING & ONLINE @ ${PORT}`);

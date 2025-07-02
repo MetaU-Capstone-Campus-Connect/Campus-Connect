@@ -5,6 +5,7 @@ import HomePage from "./components/Home/HomePage";
 import SignUp from "./components/Home/SignUp";
 import Login from "./components/Home/Login";
 import UserProfile from "./components/User/UserProfile";
+import Groups from "./components/Groups/Groups";
 
 function App() {
   const [userName, setUserName] = useState();
@@ -61,6 +62,14 @@ function App() {
             element={
               <>
                 <UserProfile userInfo={userInfo} />
+              </>
+            }
+          />
+          <Route
+            path="/study-groups"
+            element={
+              <>
+                <Groups userName={userName}/>
               </>
             }
           />
