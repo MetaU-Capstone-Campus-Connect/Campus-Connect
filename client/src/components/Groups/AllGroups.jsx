@@ -1,4 +1,5 @@
 import "../Groups/css/AllGroups.css";
+import GroupInfo from "./GroupInfo";
 
 function AllGroups({ groups }) {
   
@@ -19,7 +20,7 @@ function AllGroups({ groups }) {
               <h2>{group.groupName}</h2>
             </div>
             <div className="groupMoreInfo">
-              <button>More Info</button>
+              <GroupInfo group={group}/>
             </div>
           </div>
         </div>

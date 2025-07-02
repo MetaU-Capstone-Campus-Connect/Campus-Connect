@@ -8,13 +8,13 @@ import AllGroups from "./AllGroups";
 function Groups({ userName }) {
   const [groups, setGroups] = useState([]);
 
-  const fetchGroups = () => {
-    fetch("http://localhost:3000/groups")
-      .then((response) => response.json())
-      .then((data) => {
-        setGroups(data);
-      });
-  };
+   const fetchGroups = () => {
+      fetch("http://localhost:3000/groups")
+        .then((response) => response.json())
+        .then((data) => {
+          setGroups(data);
+        });
+    };
 
   useEffect(() => {
     fetchGroups();

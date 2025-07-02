@@ -27,9 +27,14 @@ router.post("/createGroup", async (req, res) => {
   }
 });
 
+
 router.get("/groups", async (req, res) => {
     try {
-        const groups = await prisma.groups.findMany();
+        const groups = await prisma.groups.findMany({
+            include: {
+                groupMembers: true,
+            },
+        });
 
         res.status(200).json(groups);
     } catch (error) {
