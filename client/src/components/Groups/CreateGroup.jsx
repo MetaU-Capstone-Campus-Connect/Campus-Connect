@@ -1,7 +1,7 @@
 import "../Groups/css/CreateGroup.css";
 import { useState } from "react";
 
-function CreateGroup({ userName }) {
+function CreateGroup({ userName, refreshGroups }) {
   const [modalStatus, setModalStatus] = useState(false);
 
   const handleOpen = () => {
@@ -17,7 +17,6 @@ function CreateGroup({ userName }) {
     const name = event.target.groupName.value;
     const desc = event.target.groupDesc.value;
     const img = event.target.groupImg.value;
-    console.log({ name, desc, img, userName });
     try {
       const response = await fetch(`http://localhost:3000/createGroup`, {
         method: "POST",
@@ -31,7 +30,7 @@ function CreateGroup({ userName }) {
       });
       if (response.ok) {
         handleClose();
-        console.log("YES");
+        refreshGroups();
       }
     } catch (error) {
       console.error("ERROR: Creating a new study group ", error);
@@ -64,7 +63,6 @@ function CreateGroup({ userName }) {
               <input
                 type="groupImg"
                 name="groupImg"
-                required
                 placeholder="Enter Study Group Image"
               />
               <div>

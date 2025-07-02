@@ -1,0 +1,41 @@
+.AllGroups {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 30px;
+    justify-content: center;
+    margin-bottom: 150px;
+}
+
+.groupCard {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    width: 225px;
+    margin-top: 25px;
+    padding: 15px;
+    gap: 20px;
+    border-radius: 10px;
+    background-color: #1C4B8F;
+    border-color: #1C2127;
+    border-style: solid;
+    color: white;
+}
+
+.groupLower {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.groupTitle {
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.groupImg {
+    border-radius: 10px;
+}
