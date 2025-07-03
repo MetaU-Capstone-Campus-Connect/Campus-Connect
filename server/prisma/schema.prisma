@@ -21,7 +21,7 @@ model Users {
 
 model Map {
   mapId       Int      @id @default(autoincrement())
-  mapUserName String
+  mapUserName String   @unique
   mapLong     Float
   mapLat      Float
   createTime  DateTime @default(now())
