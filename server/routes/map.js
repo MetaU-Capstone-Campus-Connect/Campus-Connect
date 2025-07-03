@@ -7,8 +7,17 @@ router.post("/setLocation", async (req, res) => {
     try {
         const { mapUserName, mapLong, mapLat, message } = req.body;
 
-        const newLocation = await prisma.map.create({
-            data: {
+        const newLocation = await prisma.map.upsert({
+            where: {
+                mapUserName,
+            },
+            update: {
+                mapLong,
+                mapLat,
+                message,
+                createTime: new Date(),
+            },
+            create: {
                 mapUserName,
                 mapLong,
                 mapLat,
@@ -28,6 +37,21 @@ router.get("/getLocations", async (req, res) => {
         return res.status(200).json(locations);
     } catch (error) {
         return res.status(500).json({ message: "Error: Fetching all the set map locations", error})
+    }
+})
+
+router.delete("/deleteLocation", async (req, res) => {
+    try {
+        const { mapUserName } = req.body;
+
+        const deleteLocation = await prisma.map.delete({
+            where: {
+                mapUserName,
+            }
+        });
+        return res.status(200).json({message: "Delete user location"})
+    } catch (error) {
+        return res.status(500).json({ message: "Error: Deleting user location", error})
     }
 })
 
