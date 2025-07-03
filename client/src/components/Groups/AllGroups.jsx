@@ -1,11 +1,10 @@
 import "../Groups/css/AllGroups.css";
 import GroupInfo from "./GroupInfo";
 
-function AllGroups({ groups }) {
-  
+function AllGroups({ showGroups, userName, refreshGroups }) {
   return (
     <div className="AllGroups">
-      {groups.map((group) => (
+      {showGroups.map((group) => (
         <div className="groupCard" key={group.groupId}>
           <div className="groupImg">
             <img
@@ -20,7 +19,11 @@ function AllGroups({ groups }) {
               <h2>{group.groupName}</h2>
             </div>
             <div className="groupMoreInfo">
-              <GroupInfo group={group}/>
+              <GroupInfo
+                group={group}
+                userName={userName}
+                refreshGroups={refreshGroups}
+              />
             </div>
           </div>
         </div>

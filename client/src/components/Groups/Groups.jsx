@@ -7,18 +7,56 @@ import AllGroups from "./AllGroups";
 
 function Groups({ userName }) {
   const [groups, setGroups] = useState([]);
+  const [myGroups, setMyGroups] = useState([]);
+  const [groupFilter, setGroupFitler] = useState(false);
+  const [showMessage, setShowMessage] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
 
-   const fetchGroups = () => {
-      fetch("http://localhost:3000/groups")
-        .then((response) => response.json())
-        .then((data) => {
-          setGroups(data);
-        });
-    };
+  const fetchAllGroups = () => {
+    fetch("http://localhost:3000/groups")
+      .then((response) => response.json())
+      .then((data) => {
+        setGroups(data);
+      });
+  };
+
+  const fetchJoinedGroups = () => {
+    fetch(`http://localhost:3000/user/${userName}/groups`)
+      .then((response) => response.json())
+      .then((data) => {
+        setMyGroups(data);
+      });
+  };
 
   useEffect(() => {
-    fetchGroups();
+    fetchAllGroups();
+    fetchJoinedGroups();
   }, []);
+
+  const displayGroups = groupFilter ? myGroups : groups;
+  const showGroups = displayGroups.filter((group) =>
+    group.groupName.includes(searchQuery),
+  );
+
+  const checkJoined = async () => {
+    try {
+      const response = await fetch(
+        `http://localhost:3000/user/${userName}/groups`,
+      );
+      const data = await response.json();
+      setMyGroups(data);
+
+      if (data.length === 0) {
+        setShowMessage(true);
+        setGroupFitler(false);
+        setTimeout(() => setShowMessage(false), 3000);
+      } else {
+        setGroupFitler(true);
+      }
+    } catch (error) {
+      console.error("Error : Fetching user joined groups", error);
+    }
+  };
 
   return (
     <div className="Groups">
@@ -26,35 +64,63 @@ function Groups({ userName }) {
 
       <div className="groupManager">
         <div className="createGroup">
-          <CreateGroup userName={userName} refreshGroups={fetchGroups}/>
+          <CreateGroup
+            userName={userName}
+            refreshGroups={() => {
+              fetchAllGroups(), fetchJoinedGroups();
+            }}
+          />
         </div>
 
         <div className="filterGroups">
           <div className="memberGroups">
-            <button>My Groups</button>
+            <button
+              onClick={() => {
+                checkJoined();
+                setSearchQuery("");
+              }}
+            >
+              My Groups
+            </button>
           </div>
           <div className="allGroups">
-            <button>All Groups</button>
+            <button
+              onClick={() => {
+                setGroupFitler(false);
+                setSearchQuery("");
+              }}
+            >
+              All Groups
+            </button>
           </div>
         </div>
 
         <div className="searchGroups">
-          <form className="searchForm">
+          <form className="searchForm" onSubmit={(e) => e.preventDefault()}>
             <input
               className="searchInput"
               type="text"
               name="board"
               placeholder="Search for study groups..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
             />
-            <button className="searchButton" type="submit">
-              Search
-            </button>
           </form>
         </div>
       </div>
 
+      {showMessage && (
+        <div className="errorMessage">
+          <h2>Sorry, you haven't joined any groups yet!</h2>
+        </div>
+      )}
+
       <div className="groupsContainer">
-        <AllGroups groups={groups} />
+        <AllGroups
+          showGroups={showGroups}
+          userName={userName}
+          refreshGroups={fetchAllGroups}
+        />
       </div>
 
       <Footer />

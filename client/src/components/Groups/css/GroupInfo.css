@@ -70,3 +70,9 @@
     flex-wrap: wrap;
     flex-direction: column;
 }
+
+.GroupInfo {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
