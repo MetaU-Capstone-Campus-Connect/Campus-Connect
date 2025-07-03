@@ -1,8 +1,7 @@
-import { useEffect } from "react";
 import "../Groups/css/GroupInfo.css";
 import { useState } from "react";
 
-function GroupInfo( {group}) {
+function GroupInfo({ group, userName, refreshGroups }) {
   const [modalStatus, setModalStatus] = useState(false);
 
   const handleOpen = () => {
@@ -13,9 +12,31 @@ function GroupInfo( {group}) {
     setModalStatus(false);
   };
 
+  const handleJoin = async (event) => {
+    try {
+      const response = await fetch(
+        `http://localhost:3000/group/${group.groupId}/join`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            userName,
+          }),
+        },
+      );
+      const dataNew = await response.json();
+      console.log(dataNew);
+      await refreshGroups();
+    } catch (error) {
+      console.error("ERROR: Creating a new study group ", error);
+    }
+  };
+
   return (
     <div className="GroupInfo">
-      <button onClick={handleOpen}>More Info</button>
+      <button onClick={handleOpen} className="infoButton">
+        More Info
+      </button>
       {modalStatus && (
         <div className="modalOverlayGroup">
           <div className="modalContentGroup">
@@ -46,7 +67,7 @@ function GroupInfo( {group}) {
               </div>
               <div className="joinButton">
                 {/* Only show if not member */}
-                <button>Join Group</button>
+                <button onClick={handleJoin}>Join Group</button>
               </div>
             </div>
           </div>

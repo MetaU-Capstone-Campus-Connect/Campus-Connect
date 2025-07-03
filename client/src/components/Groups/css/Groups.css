@@ -9,3 +9,8 @@
     flex-direction: row;
     justify-content: center;
 }
+
+.errorMessage {
+    text-align: center;
+    color: red;
+}

@@ -27,7 +27,7 @@ router.post("/createGroup", async (req, res) => {
   }
 });
 
-
+// SHOW ALL GROUPS
 router.get("/groups", async (req, res) => {
     try {
         const groups = await prisma.groups.findMany({
@@ -40,6 +40,57 @@ router.get("/groups", async (req, res) => {
     } catch (error) {
         console.error("Error: Fetching groups", error)
         res.status(500).json({message: "Error: Fetching groups"})
+    }
+});
+
+// USER JOIN GROUP
+router.post("/group/:id/join", async (req, res) => {
+  const groupId = parseInt(req.params.id);
+ const { userName}  = req.body;
+  try {
+    const updateMembers = await prisma.groups.update({
+      where: {
+        groupId: groupId,
+      },
+      data: {
+        groupMembers: {
+          connect: [{ userName: userName }],
+        },
+      },
+      include: {
+        groupMembers: true,
+      }
+    });
+
+    res.status(200).json(updateMembers);
+  } catch (error) {
+    console.error("Error updating members", error);
+    res.status(500).json({ message: "Error: Updating members" });
+  }
+});
+
+// SHOW ALL USER GROUPS
+router.get("/user/:userName/groups", async (req, res) => {
+    const { userName } = req.params;
+
+    try {
+        const user = await prisma.users.findUnique({
+            where: {
+                userName,
+            },
+            include: {
+                Groups: {
+                  include: {
+                    groupMembers: true,
+                  }
+                }
+            }
+        })
+
+        res.status(200).json(user.Groups);
+    } catch (error) {
+        console.error("Error: Fething user joined groups", error)
+        res.status(500).json({message: "Error: Fetching user joined groups"})
     }
 })
 
