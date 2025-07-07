@@ -8,15 +8,16 @@ datasource db {
 }
 
 model Users {
-  userId            Int      @id @default(autoincrement())
-  userName          String   @unique
+  userId            Int       @id @default(autoincrement())
+  userName          String    @unique
   userPwd           String
-  accountDate       DateTime @default(now())
+  accountDate       DateTime  @default(now())
   userProfileImg    String?
   userProfileBanner String?
   userBio           String?
-  userStatus        STATUS   @default(ONLINE)
-  Groups            Groups[] @relation("GroupMember")
+  userStatus        STATUS    @default(ONLINE)
+  Groups            Groups[]  @relation("UserGroups")
+  Events            Events[]  @relation("UserEvents")
 }
 
 model Map {
@@ -29,11 +30,23 @@ model Map {
 }
 
 model Groups {
-  groupId      Int     @id @default(autoincrement())
+  groupId      Int      @id @default(autoincrement())
   groupName    String
   groupInfo    String
   groupImg     String
-  groupMembers Users[] @relation("GroupMember")
+  groupMembers Users[]  @relation("UserGroups")
+  groupEvents  Events[] @relation("GroupEvents")
+}
+
+model Events {
+  eventId       Int       @id @default(autoincrement())
+  eventName     String
+  eventInfo     String
+  eventDate     String
+  eventImg      String
+  eventLocation String
+  eventUsers    Users[]   @relation("UserEvents")
+  eventGroups   Groups[]  @relation("GroupEvents")
 }
 
 enum STATUS {
