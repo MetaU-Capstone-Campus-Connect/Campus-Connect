@@ -2,9 +2,11 @@ import "../User/css/UserProfile.css";
 import Header from "../Header";
 import Footer from "../Footer";
 import Manage from "./Manage";
-import { useState, useEffect } from "react";
+import UserGroups from "./UserGroups";
+import UserEvents from "./UserEvents";
+import { useState } from "react";
 
-function UserProfile({ userInfo }) {
+function UserProfile({ userInfo, userName }) {
   if (!userInfo) {
     return <div>LOADING...</div>;
     // Add error page component
@@ -81,10 +83,12 @@ function UserProfile({ userInfo }) {
           {/* GROUPS & ACTIVITY OF USER */}
           <div className="userInfoLower">
             <div className="userGroups">
-              <h2>User Groups</h2>
+              <h2>Groups</h2>
+              <UserGroups userName={userName} />
             </div>
             <div className="userActivity">
-              <h2>User Activity</h2>
+              <h2>Events</h2>
+              <UserEvents userName={userName} />
             </div>
           </div>
         </div>

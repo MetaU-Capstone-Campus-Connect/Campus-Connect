@@ -1,5 +1,5 @@
 import "../User/css/ManageProfileBanner.css";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 function ManageProfileBanner({ userInfo, setBannerUrl }) {
   const [modalStatus, setModalStatus] = useState(false);

@@ -62,7 +62,7 @@ function App() {
             path="/users/:name"
             element={
               <>
-                <UserProfile userInfo={userInfo} />
+                <UserProfile userInfo={userInfo} userName={userName} />
               </>
             }
           />
