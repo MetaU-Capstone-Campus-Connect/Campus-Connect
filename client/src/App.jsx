@@ -6,6 +6,7 @@ import SignUp from "./components/Home/SignUp";
 import Login from "./components/Home/Login";
 import UserProfile from "./components/User/UserProfile";
 import Groups from "./components/Groups/Groups";
+import Events from "./components/Events/Events";
 
 function App() {
   const [userName, setUserName] = useState();
@@ -69,7 +70,15 @@ function App() {
             path="/study-groups"
             element={
               <>
-                <Groups userName={userName}/>
+                <Groups userName={userName} />
+              </>
+            }
+          />
+          <Route
+            path="/events"
+            element={
+              <>
+                <Events userName={userName} />
               </>
             }
           />
