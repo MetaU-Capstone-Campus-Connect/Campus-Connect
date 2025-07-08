@@ -49,6 +49,7 @@ function Events({ userName }) {
 
   const filteredEvents = allEvents.filter((event) => {
     const eventDate = new Date(event.eventDate).toLocaleDateString("en-CA");
+    console.log(event.eventUsers);
     return eventDate === selectedDate;
   });
 
@@ -150,6 +151,9 @@ function Events({ userName }) {
                     {new Date(event.eventDate).toLocaleString()}
                   </p>
                   <b>RSVP List:</b>
+                    {event.eventUsers.map((user) => (
+                      <p>{user.userName}</p>
+                    ))}
                   {event.eventUsers.some(
                     (user) => user.userName === userName,
                   ) ? (
