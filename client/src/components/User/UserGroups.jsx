@@ -27,10 +27,10 @@ function UserGroups({ userName }) {
       ) : (
         <div className="groupList">
           {userGroups.map((group) => (
-            <div className="groupCard" key={group.groupId}>
+            <div className="groupCard" key={group.group.groupId}>
               <div className="groupImg">
                 <img
-                  src={group.groupImg || "/src/assets/default-group.jpeg"}
+                  src={group.group.groupImg || "/src/assets/default-group.jpeg"}
                   width="200"
                   height="200"
                   className="groupImg"
@@ -38,8 +38,8 @@ function UserGroups({ userName }) {
               </div>
               <div className="groupLower">
                 <div className="groupTitle">
-                  <h2>{group.groupName}</h2>
-                  <p>{group.groupInfo}</p>
+                  <h2>{group.group.groupName}</h2>
+                  <p>{group.group.groupInfo}</p>
                 </div>
               </div>
             </div>

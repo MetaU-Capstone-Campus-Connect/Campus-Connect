@@ -15,7 +15,7 @@
     background: #1C4B8F;
     padding: 20px;
     width: 400px;
-    height: 525px;
+    height: fit-content;
     border-radius: 8px;
     text-align: center;
     color: white;
@@ -80,6 +80,18 @@ input[type=eventLoco] {
 }
 
 input[type=datetime-local] {
+    border-radius: 15px;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    box-sizing: border-box;
+    width: 250px;
+    border: none;
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+
+select {
     border-radius: 15px;
     padding: 12px 20px;
     margin: 8px 0;

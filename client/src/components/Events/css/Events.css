@@ -78,3 +78,10 @@
     border-style: solid;
     color: white;
 }
+
+.directButton {
+    border: none;
+    font-size: 30px;
+    color: black;
+    background-color: #E9E9E9;
+}

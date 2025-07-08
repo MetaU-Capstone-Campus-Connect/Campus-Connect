@@ -16,7 +16,7 @@ model Users {
   userProfileBanner String?
   userBio           String?
   userStatus        STATUS    @default(ONLINE)
-  Groups            Groups[]  @relation("UserGroups")
+  members           GroupMembers[]
   Events            Events[]  @relation("UserEvents")
 }
 
@@ -34,7 +34,7 @@ model Groups {
   groupName    String
   groupInfo    String
   groupImg     String
-  groupMembers Users[]  @relation("UserGroups")
+  members      GroupMembers[]
   groupEvents  Events[] @relation("GroupEvents")
 }
 
@@ -49,9 +49,23 @@ model Events {
   eventGroups   Groups[]  @relation("GroupEvents")
 }
 
+model GroupMembers {
+  user     Users   @relation(fields: [userId], references: [userId])
+  userId   Int
+  group    Groups  @relation(fields: [groupId], references: [groupId])
+  groupId  Int
+  rank     RANK    @default(MEMBER)
+  @@id([userId, groupId])
+}
+
 enum STATUS {
   ONLINE
   BUSY
   DND
   OFFLINE
+}
+
+enum RANK {
+  ADMIN
+  MEMBER
 }

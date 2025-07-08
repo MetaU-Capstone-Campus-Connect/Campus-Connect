@@ -3,23 +3,32 @@ import { useState } from "react";
 
 function CreateEvent({ userName }) {
   const [modalStatus, setModalStatus] = useState(false);
+  const [adminGroups, setAdminGroups] = useState([]);
+  const [selectedGroupId, setSelectedGroupId] = useState();
 
-  const handleOpen = () => {
+  const handleOpen = async () => {
     setModalStatus(true);
+    try {
+      const res = await fetch(`http://localhost:3000/user/${userName}/admin`);
+      const groups = await res.json();
+      setAdminGroups(groups);
+    } catch (err) {
+      console.error("Error: Fetching admin groups", err);
+    }
   };
 
   const handleClose = () => {
     setModalStatus(false);
+    setSelectedGroupId();
   };
 
-  const handleUSubmit = async (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     const name = event.target.eventName.value;
     const info = event.target.eventInfo.value;
     const date = event.target.eventDate.value;
     const img = event.target.eventImg.value;
     const location = event.target.eventLoco.value;
-
 
     try {
       const response = await fetch(`http://localhost:3000/createEvent`, {
@@ -29,20 +38,19 @@ function CreateEvent({ userName }) {
           eventName: name,
           eventInfo: info,
           eventDate: date,
-          eventImg: img, 
-          eventLocation: location, 
+          eventImg: img,
+          eventLocation: location,
           userName: userName,
+          groupId: selectedGroupId,
         }),
       });
       if (response.ok) {
         handleClose();
-        refreshGroups();
       }
     } catch (error) {
       console.error("ERROR: Creating a new study group ", error);
     }
   };
-
 
   return (
     <div className="CreateEvent">
@@ -50,7 +58,7 @@ function CreateEvent({ userName }) {
       {modalStatus && (
         <div className="modalOverlayEvent">
           <div className="modalContentEvent">
-            <form onSubmit={handleUSubmit}>
+            <form onSubmit={handleSubmit}>
               <button className="exitButton" onClick={handleClose}>
                 <i className="fa fa-close"></i>
               </button>
@@ -84,6 +92,20 @@ function CreateEvent({ userName }) {
                 required
                 placeholder="Enter Event Date & Time"
               />
+              {adminGroups.length > 0 && (
+                <select
+                  value={selectedGroupId}
+                  name="groupSelect"
+                  onChange={(e) => setSelectedGroupId(parseInt(e.target.value))}
+                >
+                  <option disabled>Select Group</option>
+                  {adminGroups.map((group) => (
+                    <option key={group.groupId} value={group.groupId}>
+                      {group.groupName}
+                    </option>
+                  ))}
+                </select>
+              )}
               <div>
                 <button className="createButton" type="submit">
                   Create

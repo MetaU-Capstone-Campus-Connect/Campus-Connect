@@ -24,7 +24,8 @@ function Groups({ userName }) {
     fetch(`http://localhost:3000/user/${userName}/groups`)
       .then((response) => response.json())
       .then((data) => {
-        setMyGroups(data);
+        const groupData = data.map((group) => group.group);
+        setMyGroups(groupData);
       });
   };
 
@@ -44,7 +45,8 @@ function Groups({ userName }) {
         `http://localhost:3000/user/${userName}/groups`,
       );
       const data = await response.json();
-      setMyGroups(data);
+      const groupData = data.map((group) => group.group);
+      setMyGroups(groupData);
 
       if (data.length === 0) {
         setShowMessage(true);

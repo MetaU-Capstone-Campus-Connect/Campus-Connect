@@ -3,24 +3,38 @@ const router = express.Router();
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 
-
 // CREATE EVENT
 router.post("/createEvent", async (req, res) => {
   try {
-    const { eventName, eventInfo, eventDate, eventImg, eventLocation, userName } = req.body;
+    const {
+      eventName,
+      eventInfo,
+      eventDate,
+      eventImg,
+      eventLocation,
+      userName,
+      groupId,
+    } = req.body;
 
-    const newEvent = await prisma.events.create({
-      data: {
-        eventName,
-        eventInfo,
-        eventDate,
-        eventImg,
-        eventLocation,
-        eventUsers: {
-          connect: [{ userName: userName }],
-        },
+    const eventData = {
+      eventName,
+      eventInfo,
+      eventDate,
+      eventImg,
+      eventLocation,
+      eventUsers: {
+        connect: [{ userName }],
       },
-    });
+    };
+
+    if (groupId) {
+      eventData.eventGroups = {
+        connect: [{ groupId }],
+      };
+    }
+
+    const newEvent = await prisma.events.create({ data: eventData });
+
     return res
       .status(201)
       .json({ message: "Event added to system", data: newEvent });
@@ -30,13 +44,13 @@ router.post("/createEvent", async (req, res) => {
   }
 });
 
-
 // SHOW ALL EVENTS
 router.get("/events", async (req, res) => {
   try {
     const events = await prisma.events.findMany({
       include: {
         eventUsers: true,
+        eventGroups: true,
       },
     });
 
@@ -73,7 +87,6 @@ router.post("/event/:id/join", async (req, res) => {
   }
 });
 
-
 router.get("/user/:userName/events", async (req, res) => {
   const { userName } = req.params;
 
@@ -95,6 +108,38 @@ router.get("/user/:userName/events", async (req, res) => {
   } catch (error) {
     console.error("Error: Fething user joined events", error);
     res.status(500).json({ message: "Error: Fetching user joined events" });
+  }
+});
+
+// DISPLAY ADMIN GROUPS
+router.get("/user/:userName/admin", async (req, res) => {
+  const { userName } = req.params;
+
+  try {
+    const user = await prisma.users.findUnique({
+      where: { userName },
+      include: {
+        members: {
+          where: {
+            rank: "ADMIN",
+          },
+          include: {
+            group: true,
+          },
+        },
+      },
+    });
+
+    if (!user) {
+      return res.status(404).json({ error: "Error: User not found" });
+    }
+
+    const adminGroups = user.members.map((member) => member.group);
+
+    res.status(200).json(adminGroups);
+  } catch (error) {
+    console.error("Error: fetching admin groups", error);
+    res.status(500).json({ error: "Error: to fetch admin groups" });
   }
 });
 
