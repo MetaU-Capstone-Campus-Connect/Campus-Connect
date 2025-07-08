@@ -76,3 +76,14 @@
     flex-wrap: wrap;
     justify-content: center;
 }
+.groupEventItem {
+    margin-top: 15px;
+    border: 2px solid #1C2127;
+    border-radius: 15px;
+    padding: 15px;
+    margin-bottom: 15px;
+}
+
+.groupMemberList {
+    margin-top: 15px;
+}

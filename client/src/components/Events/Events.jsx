@@ -49,11 +49,12 @@ function Events({ userName }) {
 
   const filteredEvents = allEvents.filter((event) => {
     const eventDate = new Date(event.eventDate).toLocaleDateString("en-CA");
+    console.log(event.eventUsers);
     return eventDate === selectedDate;
   });
 
   const handleNext = () => setOffset(offset + 5);
-  const handlePrev = () => setOffset((prev) => Math.max(prev -5, 0));
+  const handlePrev = () => setOffset((prev) => Math.max(prev - 5, 0));
 
   const handleJoin = async (eventId) => {
     try {
@@ -65,6 +66,20 @@ function Events({ userName }) {
           body: JSON.stringify({ userName }),
         },
       );
+
+      if (response.ok) {
+        setAllEvents((prevEvents) =>
+          prevEvents.map((event) => {
+            if (event.eventId === eventId) {
+              return {
+                ...event,
+                eventUsers: [...event.eventUsers, { userName }],
+              };
+            }
+            return event;
+          }),
+        );
+      }
     } catch (error) {
       console.error("Error joining event:", error);
     }
@@ -88,46 +103,71 @@ function Events({ userName }) {
           ))}
         </div>
         <div className="controlDirection">
-          <button onClick={handlePrev} disabled={offset === 0}>
-            ←
+          <button
+            onClick={handlePrev}
+            disabled={offset === 0}
+            className="directButton"
+          >
+            <i class="fa fa-arrow-left"></i>
           </button>
-          <button onClick={handleNext}>→</button>
+          <button onClick={handleNext} className="directButton">
+            <i class="fa fa-arrow-right"></i>
+          </button>
         </div>
       </div>
 
       <div className="eventsContainer">
         {selectedDate ? (
           <>
-              {filteredEvents.length === 0 ? (
-                <h3>Sorry, there are no events scheduled!</h3>
-              ) : (
-                filteredEvents.map((event) => (
-                  <div key={event.eventId} className="eventCard">
-                    <h4>{event.eventName}</h4>
-                    <p>{event.eventInfo}</p>
+            {filteredEvents.length === 0 ? (
+              <h3>Sorry, there are no events scheduled!</h3>
+            ) : (
+              filteredEvents.map((event) => (
+                <div key={event.eventId} className="eventCard">
+                  <img
+                    src={event.eventImg || "/src/assets/default-event.webp"}
+                    width="200"
+                    height="200"
+                    className="eventImg"
+                  />
+                  <h4>{event.eventName}</h4>
+                  <p>{event.eventInfo}</p>
+                  <p>
+                    <b>Where:</b> {event.eventLocation}
+                  </p>
+                  {event.eventGroups?.length > 0 && (
                     <p>
-                      <b>Where:</b> {event.eventLocation}
+                      <b>Group Host:</b> {event.eventGroups[0].groupName}
                     </p>
-                    <p>
-                      <b>Date & Time:</b>{" "}
-                      {new Date(event.eventDate).toLocaleString()}
-                    </p>
-                    <img
-                      src={event.eventImg || "/src/assets/default-event.webp"}
-                      width="200"
-                      height="200"
-                      className="eventImg"
-                    />
-                    <b>RSVP List:</b>
-                    {event.eventUsers.map((member) => (
-                      <p>{member.userName}</p>
+                  )}
+                  {event.eventGroups?.length === 0 &&
+                    event.eventUsers?.length > 0 && (
+                      <p>
+                        <b>User Host:</b> {event.eventUsers[0].userName}
+                      </p>
+                    )}
+                  <p>
+                    <b>Date & Time:</b>{" "}
+                    {new Date(event.eventDate).toLocaleString()}
+                  </p>
+                  <b>RSVP List:</b>
+                    {event.eventUsers.map((user) => (
+                      <p>{user.userName}</p>
                     ))}
+                  {event.eventUsers.some(
+                    (user) => user.userName === userName,
+                  ) ? (
+                    <button disabled className="joinedButton">
+                      Joined
+                    </button>
+                  ) : (
                     <button onClick={() => handleJoin(event.eventId)}>
                       RSVP
                     </button>
-                  </div>
-                ))
-              )}
+                  )}
+                </div>
+              ))
+            )}
           </>
         ) : (
           <h3>Select a date to view events!</h3>

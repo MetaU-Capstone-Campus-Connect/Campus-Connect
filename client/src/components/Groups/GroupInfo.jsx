@@ -3,6 +3,7 @@ import { useState } from "react";
 
 function GroupInfo({ group, userName, refreshGroups }) {
   const [modalStatus, setModalStatus] = useState(false);
+  const [groupState, setGroupState] = useState(group);
 
   const handleOpen = () => {
     setModalStatus(true);
@@ -12,23 +13,29 @@ function GroupInfo({ group, userName, refreshGroups }) {
     setModalStatus(false);
   };
 
-  const handleJoin = async (event) => {
+  const handleJoin = async () => {
     try {
       const response = await fetch(
-        `http://localhost:3000/group/${group.groupId}/join`,
+        `http://localhost:3000/group/${groupState.groupId}/join`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            userName,
-          }),
+          body: JSON.stringify({ userName }),
         },
       );
-      const dataNew = await response.json();
-      console.log(dataNew);
-      await refreshGroups();
+
+      if (response.ok) {
+        const updatedMembers = [
+          ...groupState.members,
+          {
+            user: { userName },
+            rank: "MEMBER",
+          },
+        ];
+        setGroupState({ ...groupState, members: updatedMembers });
+      }
     } catch (error) {
-      console.error("ERROR: Creating a new study group ", error);
+      console.error("Error: Joining group", error);
     }
   };
 
@@ -57,17 +64,44 @@ function GroupInfo({ group, userName, refreshGroups }) {
               <div className="groupInfoList">
                 <div className="groupEvents">
                   <h3>Group Events</h3>
+                  {group.groupEvents?.length > 0 ? (
+                    group.groupEvents.map((event) => (
+                      <div key={event.eventId} className="groupEventItem">
+                        <p>
+                          <b>{event.eventName}</b>
+                        </p>
+                        <p>{event.eventInfo}</p>
+                        <p>{new Date(event.eventDate).toLocaleString()}</p>
+                      </div>
+                    ))
+                  ) : (
+                    <p>No events currently scheduled!</p>
+                  )}
                 </div>
                 <div className="groupMembers">
                   <h3>Group Members</h3>
-                  {group.groupMembers.map((member) => (
-                    <p>{member.userName}</p>
-                  ))}
+                  {[...group.members]
+                    .sort((a, b) => (a.rank === "ADMIN" ? -1 : 1))
+                    .map((member) => (
+                      <div className="groupMemberList">
+                        <p key={member.userId}>
+                          {member.user.userName}
+                          {member.rank === "ADMIN" && " (Group Leader)"}
+                        </p>
+                      </div>
+                    ))}
                 </div>
               </div>
               <div className="joinButton">
-                {/* Only show if not member */}
-                <button onClick={handleJoin}>Join Group</button>
+                {groupState.members.some(
+                  (member) => member.user.userName === userName,
+                ) ? (
+                  <button disabled className="joinedButton">
+                    Joined
+                  </button>
+                ) : (
+                  <button onClick={handleJoin}>Join Group</button>
+                )}
               </div>
             </div>
           </div>
