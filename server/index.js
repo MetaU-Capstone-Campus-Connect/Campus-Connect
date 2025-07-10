@@ -8,7 +8,7 @@ const auth = require("./routes/auth");
 const map = require("./routes/map")
 const groups = require("./routes/groups")
 const events = require("./routes/events")
-const scoreTitle = require("./recommendEvents/scoreTitle")
+const scoreEvents = require("./recommendEvents/scoreEvents");
 app.use(express.json());
 
 app.use(
@@ -35,7 +35,7 @@ app.use("/", auth);
 app.use("/", map);
 app.use("/", groups)
 app.use("/", events)
-app.use("/", scoreTitle);
+app.use("/", scoreEvents);
 
 app.listen(PORT, () => {
   console.log(`SERVER IS RUNNING & ONLINE @ ${PORT}`);
