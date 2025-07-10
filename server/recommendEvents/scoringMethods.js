@@ -8,3 +8,30 @@ export function scoreSimilarity(upcomingEvents, pastEvents) {
 
   return score;
 }
+
+export function mapMutuals(user, pastEvents) {
+  const map = new Map();
+
+  for (const event of pastEvents) {
+    for (const mutual of event.eventUsers.map((user) => user.userName)) {
+      if (mutual !== user) {
+        map.set(mutual, (map.get(mutual) || 0) + 1);
+      }
+    }
+  }
+  return map;
+}
+
+export function scoreMutuals(eventUserList, mutualsMap, currentUserName) {
+  let score = 0;
+  if (eventUserList.length === 0) {
+    return 0;
+  }
+
+  for (const user of eventUserList) {
+    if (user !== currentUserName) {
+      score += mutualsMap.get(user) || 0;
+    }
+  }
+  return score / eventUserList.length;
+}
