@@ -135,6 +135,9 @@ function Events({ userName }) {
                   <p>
                     <b>Where:</b> {event.eventLocation}
                   </p>
+                  <p>
+                    <b>How Long?:</b> {event.eventLength} Hour(s)
+                  </p>
                   {event.eventGroups?.length > 0 && (
                     <p>
                       <b>Group Host:</b> {event.eventGroups[0].groupName}
