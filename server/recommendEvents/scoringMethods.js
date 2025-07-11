@@ -48,11 +48,31 @@ export function mapHosts(user, pastEvents) {
   return map;
 }
 
-
 export function scoreHosts(eventHost, hostMap, totalPastEvents) {
   if (!eventHost || totalPastEvents.length === 0) {
     return 0;
   }
   const hostTotal = hostMap.get(eventHost) || 0;
   return hostTotal / totalPastEvents;
+}
+
+export function mapDays(pastEvents) {
+  const map = new Map();
+
+  for (const event of pastEvents) {
+    const date = new Date(event.eventDate);
+    const day = date.toLocaleString("en-US", {weekday: "long"})
+    map.set(day, (map.get(day) || 0) + 1)
+  }
+  return map;
+}
+
+export function scoreDays(eventDate, mapDays, totalPastEvents) {
+  if (!eventDate || totalPastEvents.length === 0) {
+    return 0;
+  }
+  const date = new Date(eventDate);
+  const day = date.toLocaleString("en-US", { weekday: "long" });
+  const daysTotal = mapDays.get(day) || 0;
+  return daysTotal / totalPastEvents;
 }
