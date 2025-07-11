@@ -143,7 +143,7 @@ function Events({ userName }) {
                   {event.eventGroups?.length === 0 &&
                     event.eventUsers?.length > 0 && (
                       <p>
-                        <b>User Host:</b> {event.eventUsers[0].userName}
+                        <b>User Host:</b> {event.eventHost}
                       </p>
                     )}
                   <p>

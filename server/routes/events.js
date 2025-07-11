@@ -7,6 +7,7 @@ const prisma = new PrismaClient();
 router.post("/createEvent", async (req, res) => {
   try {
     const {
+      eventHost,
       eventName,
       eventInfo,
       eventDate,
@@ -17,6 +18,7 @@ router.post("/createEvent", async (req, res) => {
     } = req.body;
 
     const eventData = {
+      eventHost,
       eventName,
       eventInfo,
       eventDate,

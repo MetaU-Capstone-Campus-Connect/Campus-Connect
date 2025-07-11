@@ -6,6 +6,8 @@ const {
   scoreSimilarity,
   mapMutuals,
   scoreMutuals,
+  mapHosts,
+  scoreHosts,
 } = require("./scoringMethods");
 
 const scoreWeight = {
@@ -14,7 +16,7 @@ const scoreWeight = {
   info: 0.15,
   dateTime: 0.15,
   location: 0.05,
-  groups: 0.05,
+  hosts: 0.05,
 };
 
 router.get("/user/:userName/scoreEvents", async (req, res) => {
@@ -61,6 +63,8 @@ router.get("/user/:userName/scoreEvents", async (req, res) => {
     const pastDescriptions = pastEvents.map((event) => event.eventInfo);
     const pastLocations = pastEvents.map((event) => event.eventLocation);
     const mutualMap = mapMutuals(userName, pastEvents);
+    const hostMap = mapHosts(userName, pastEvents);
+    const totalPastEvents = pastEvents.length;
 
     const scoreEvents = upcomingEvents.map((event) => {
       let titleMax = 0;
@@ -69,6 +73,9 @@ router.get("/user/:userName/scoreEvents", async (req, res) => {
       
       const eventUserList = event.eventUsers.map((user) => user.userName);
       const scoreUsers = scoreMutuals(eventUserList, mutualMap, userName);
+
+      const eventHost = event.eventHost;
+      const scoreHost = scoreHosts(eventHost, hostMap, totalPastEvents);
 
       for (const pastTitle of pastTitles) {
         titleMax = Math.max(
@@ -95,7 +102,8 @@ router.get("/user/:userName/scoreEvents", async (req, res) => {
         (scoreWeight.title * titleMax) +
         (scoreWeight.info * infoMax) +
         (scoreWeight.location * locationMax) +
-        (scoreWeight.users * scoreUsers);
+        (scoreWeight.users * scoreUsers) +
+        (scoreWeight.hosts * scoreHost);
 
       return {
         eventId: event.eventId,
@@ -104,6 +112,7 @@ router.get("/user/:userName/scoreEvents", async (req, res) => {
         scoreInfo: infoMax,
         scoreLocation: locationMax,
         scoreUsers: scoreUsers,
+        scoreHost: scoreHost,
         weightedTotal: weightedTotal,
       };
     });

@@ -33,5 +33,26 @@ export function scoreMutuals(eventUserList, mutualsMap, currentUserName) {
       score += mutualsMap.get(user) || 0;
     }
   }
-  return score / eventUserList.length;
+  return score / mutualsMap.size;
+}
+
+export function mapHosts(user, pastEvents) {
+  const map = new Map();
+
+  for (const event of pastEvents) {
+    const host = event.eventUsers[0].userName;
+    if (host !== user) {
+      map.set(host, (map.get(host) || 0) + 1)
+    }
+  }
+  return map;
+}
+
+
+export function scoreHosts(eventHost, hostMap, totalPastEvents) {
+  if (!eventHost || totalPastEvents.length === 0) {
+    return 0;
+  }
+  const hostTotal = hostMap.get(eventHost) || 0;
+  return hostTotal / totalPastEvents;
 }

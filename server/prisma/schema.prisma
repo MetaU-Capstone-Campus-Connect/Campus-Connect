@@ -40,6 +40,7 @@ model Groups {
 
 model Events {
   eventId       Int       @id @default(autoincrement())
+  eventHost     String
   eventName     String
   eventInfo     String
   eventDate     String

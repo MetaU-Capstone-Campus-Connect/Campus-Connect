@@ -35,6 +35,7 @@ function CreateEvent({ userName }) {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
+          eventHost: userName,
           eventName: name,
           eventInfo: info,
           eventDate: date,
@@ -48,7 +49,7 @@ function CreateEvent({ userName }) {
         handleClose();
       }
     } catch (error) {
-      console.error("ERROR: Creating a new study group ", error);
+      console.error("ERROR: Creating a new event ", error);
     }
   };
 
