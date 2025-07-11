@@ -40,7 +40,7 @@ export function mapHosts(user, pastEvents) {
   const map = new Map();
 
   for (const event of pastEvents) {
-    const host = event.eventUsers[0].userName;
+    const host = event.eventHost;
     if (host !== user) {
       map.set(host, (map.get(host) || 0) + 1)
     }
