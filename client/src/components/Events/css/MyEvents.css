@@ -1,0 +1,12 @@
+.MyEvents {
+    text-align: center;
+}
+
+.myEventsList {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 30px;
+    justify-content: center;
+    margin-bottom: 150px;
+}
