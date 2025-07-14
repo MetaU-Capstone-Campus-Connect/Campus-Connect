@@ -1,0 +1,63 @@
+.eventManager {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.listDays {
+    margin-top: 40px;
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    justify-content: space-evenly;
+    background-color: white;
+    border: 2px solid #1C2127;
+    border-radius: 15px;
+    padding: 20px;
+}
+
+.day {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 25px;
+    margin-bottom: 25px;
+    padding: 15px;
+    gap: 20px;
+    border-radius: 10px;
+    background-color: #1C4B8F;
+    border-color: #1C2127;
+    border-style: solid;
+    color: white;
+}
+
+.dayTitle {
+    font-size: 20px;
+}
+
+.controlDirection {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    margin-top: 10px;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+.eventsContainer {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 30px;
+    justify-content: center;
+    margin-bottom: 150px;
+}
+
+.directButton {
+    border: none;
+    font-size: 30px;
+    color: black;
+    background-color: #E9E9E9;
+}
