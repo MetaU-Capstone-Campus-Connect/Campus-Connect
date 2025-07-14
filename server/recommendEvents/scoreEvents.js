@@ -8,14 +8,18 @@ const {
   scoreMutuals,
   mapHosts,
   scoreHosts,
+  mapDays,
+  scoreDays,
+  scoreAvailability,
 } = require("./scoringMethods");
 
 const scoreWeight = {
   title: 0.25,
-  users: 0.25,
-  info: 0.15,
-  dateTime: 0.15,
-  location: 0.05,
+  availability: 0.2,
+  users: 0.2,
+  location: 0.1,
+  info: 0.05,
+  days: 0.05,
   hosts: 0.05,
 };
 
@@ -41,20 +45,21 @@ router.get("/user/:userName/scoreEvents", async (req, res) => {
         eventDate: {
           gte: currentDate,
         },
-        eventUsers: {
-          none: {
-            userName,
-          },
-        },
       },
       include: {
-        eventUsers: { 
-          select:{ 
-            userName: true 
-          } 
+        eventUsers: {
+          select: { userName: true },
         },
       },
     });
+
+    const rsvpEvents = upcomingEvents.filter((event) =>
+      event.eventUsers.some((user) => user.userName === userName)
+    );
+
+    const nonRsvpEvents = upcomingEvents.filter((event) =>
+      event.eventUsers.every((user) => user.userName !== userName)
+    );
 
     const pastEvents = user.Events.filter(
       (event) => event.eventDate < currentDate
@@ -64,18 +69,20 @@ router.get("/user/:userName/scoreEvents", async (req, res) => {
     const pastLocations = pastEvents.map((event) => event.eventLocation);
     const mutualMap = mapMutuals(userName, pastEvents);
     const hostMap = mapHosts(userName, pastEvents);
+    const dayMap = mapDays(pastEvents);
     const totalPastEvents = pastEvents.length;
 
-    const scoreEvents = upcomingEvents.map((event) => {
+    const scoreEvents = nonRsvpEvents.map((event) => {
       let titleMax = 0;
       let infoMax = 0;
       let locationMax = 0;
       
       const eventUserList = event.eventUsers.map((user) => user.userName);
       const scoreUsers = scoreMutuals(eventUserList, mutualMap, userName);
-
       const eventHost = event.eventHost;
       const scoreHost = scoreHosts(eventHost, hostMap, totalPastEvents);
+      const scoreDay = scoreDays(event.eventDate, dayMap, totalPastEvents);
+      const scoreAvbl = scoreAvailability(event, rsvpEvents);
 
       for (const pastTitle of pastTitles) {
         titleMax = Math.max(
@@ -99,11 +106,13 @@ router.get("/user/:userName/scoreEvents", async (req, res) => {
       }
 
       const weightedTotal =
-        (scoreWeight.title * titleMax) +
-        (scoreWeight.info * infoMax) +
-        (scoreWeight.location * locationMax) +
-        (scoreWeight.users * scoreUsers) +
-        (scoreWeight.hosts * scoreHost);
+        scoreWeight.title * titleMax +
+        scoreWeight.info * infoMax +
+        scoreWeight.location * locationMax +
+        scoreWeight.users * scoreUsers +
+        scoreWeight.hosts * scoreHost +
+        scoreWeight.days * scoreDay +
+        scoreWeight.availability * scoreAvbl;
 
       return {
         eventId: event.eventId,
@@ -113,6 +122,8 @@ router.get("/user/:userName/scoreEvents", async (req, res) => {
         scoreLocation: locationMax,
         scoreUsers: scoreUsers,
         scoreHost: scoreHost,
+        scoreDay: scoreDay,
+        scoreAvbl: scoreAvbl,
         weightedTotal: weightedTotal,
       };
     });

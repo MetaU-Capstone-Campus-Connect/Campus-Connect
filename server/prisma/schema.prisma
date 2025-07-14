@@ -46,6 +46,7 @@ model Events {
   eventDate     String
   eventImg      String
   eventLocation String
+  eventLength   Int
   eventUsers    Users[]   @relation("UserEvents")
   eventGroups   Groups[]  @relation("GroupEvents")
 }

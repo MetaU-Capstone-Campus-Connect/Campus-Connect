@@ -13,6 +13,7 @@ router.post("/createEvent", async (req, res) => {
       eventDate,
       eventImg,
       eventLocation,
+      eventLength,
       userName,
       groupId,
     } = req.body;
@@ -24,6 +25,7 @@ router.post("/createEvent", async (req, res) => {
       eventDate,
       eventImg,
       eventLocation,
+      eventLength,
       eventUsers: {
         connect: [{ userName }],
       },

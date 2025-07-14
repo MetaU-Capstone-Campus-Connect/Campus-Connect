@@ -29,6 +29,7 @@ function CreateEvent({ userName }) {
     const date = event.target.eventDate.value;
     const img = event.target.eventImg.value;
     const location = event.target.eventLoco.value;
+    const length = event.target.eventLength.value;
 
     try {
       const response = await fetch(`http://localhost:3000/createEvent`, {
@@ -41,6 +42,7 @@ function CreateEvent({ userName }) {
           eventDate: date,
           eventImg: img,
           eventLocation: location,
+          eventLength: parseInt(length),
           userName: userName,
           groupId: selectedGroupId,
         }),
@@ -65,27 +67,33 @@ function CreateEvent({ userName }) {
               </button>
               <h2>Create Event</h2>
               <input
-                type="eventName"
+                type="text"
                 name="eventName"
                 required
                 placeholder="Enter Event Name"
               />
               <input
-                type="eventInfo"
+                type="text"
                 name="eventInfo"
                 required
                 placeholder="Enter Event Description"
               />
               <input
-                type="eventImg"
+                type="text"
                 name="eventImg"
                 placeholder="Enter Event Image"
               />
               <input
-                type="eventLoco"
+                type="text"
                 name="eventLoco"
                 required
                 placeholder="Enter Event Location"
+              />
+              <input
+                type="text"
+                name="eventLength"
+                required
+                placeholder="Enter Event Length (Hours)"
               />
               <input
                 type="datetime-local"
