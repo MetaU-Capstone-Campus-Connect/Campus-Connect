@@ -117,13 +117,13 @@ router.get("/user/:userName/scoreEvents", async (req, res) => {
       return {
         eventId: event.eventId,
         eventName: event.eventName,
-        scoreTitle: titleMax,
-        scoreInfo: infoMax,
-        scoreLocation: locationMax,
-        scoreUsers: scoreUsers,
-        scoreHost: scoreHost,
-        scoreDay: scoreDay,
-        scoreAvbl: scoreAvbl,
+        eventLocation: event.eventLocation,
+        eventLength: event.eventLength,
+        eventDate: event.eventDate,
+        eventUsers: event.eventUsers,
+        eventHost: event.eventHost,
+        eventInfo: event.eventInfo,
+        eventImg: event.eventImg,
         weightedTotal: weightedTotal,
       };
     });
