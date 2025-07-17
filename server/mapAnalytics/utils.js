@@ -47,7 +47,7 @@ export function checkPoint(point, cell) {
   return checkLat && checkLong;
 }
 
-function getNeighborIndices(cell, ROWS, COLS) {
+function getNeighborIndices(cell) {
   const directions = [
     [-1, 0],
     [1, 0],
@@ -85,7 +85,7 @@ export function createClusters(grid) {
       clusterCells.push(current);
       totalCount += current.count;
 
-      const neighbors = getNeighborIndices(current, ROWS, COLS);
+      const neighbors = getNeighborIndices(current);
       for (const { row, col } of neighbors) {
         const neighborIndex = getIndex(row, col);
         const neighbor = grid[neighborIndex];
@@ -153,7 +153,7 @@ export function getLowestPopulation(grid, clusters) {
       const cellIndex = index(cell.row, cell.col);
       skipSet.add(cellIndex);
 
-      const neighbors = getNeighborIndices(cell, ROWS, COLS);
+      const neighbors = getNeighborIndices(cell);
       for (const { row, col } of neighbors) {
         const neighborIndex = index(row, col);
         skipSet.add(neighborIndex);
