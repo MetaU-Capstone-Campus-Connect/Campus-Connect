@@ -102,7 +102,6 @@ export function createClusters(grid) {
   return clusters;
 }
 
-// https://www.superdatascience.com/blogs/self-organizing-maps-soms-k-means-clustering-refresher
 export function getCentroid(cluster) {
   let totalLong = 0;
   let totalLat = 0;
