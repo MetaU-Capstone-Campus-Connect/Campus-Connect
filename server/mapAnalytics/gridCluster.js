@@ -2,14 +2,22 @@ const express = require("express");
 const router = express.Router();
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
-const { convertBorder, createGrid, checkPoint } = require("./utils");
+const {
+  convertBorder,
+  createGrid,
+  checkPoint,
+  createClusters,
+  getBiggestCluster,
+  getCentroid,
+  getLowestPopulation,
+} = require("./utils");
 
 const mapBorder = {
   polygon: [
-    { lat: 7.48177726883968, lng: -122.15139858150746 },
-    { lat: 37.48072367834857, lng: -122.15104591426888 },
-    { lat: 37.4792209529839, lng: -122.17215864667745 },
-    { lat: 37.48501306933228, lng: -122.17409384284025 },
+    { lat: 37.48188439982738, lng: -122.15137870228908 },
+    { lat: 37.480519446100864, lng: -122.15077332026456 },
+    { lat: 37.47982552151212, lng: -122.16782010873156 },
+    { lat: 37.48215891264268, lng: -122.16750300387568 },
   ],
 };
 
@@ -32,7 +40,17 @@ router.get("/gridCluster", async (req, res) => {
     }
   }
 
-  res.json(grid);
+  const clusters = createClusters(grid);
+  const biggestCluster = getBiggestCluster(clusters);
+  const lowestPopulatedLocation = getLowestPopulation(grid, clusters);
+  const highestPopulatedLocation = getCentroid(biggestCluster);
+
+  res.json({
+    highestPopulated: highestPopulatedLocation,
+    leastPopulated: lowestPopulatedLocation,
+    clusters: clusters,
+    grid: grid,
+  });
 });
 
 module.exports = router;
