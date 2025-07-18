@@ -48,6 +48,7 @@ router.get("/gridCluster", async (req, res) => {
   res.json({
     highestPopulated: highestPopulatedLocation,
     leastPopulated: lowestPopulatedLocation,
+    biggestCluster,
     clusters: clusters,
     grid: grid,
   });

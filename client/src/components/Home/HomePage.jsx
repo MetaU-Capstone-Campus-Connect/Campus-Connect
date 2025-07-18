@@ -14,14 +14,15 @@ function HomePage({ userName }) {
   const apiKey = import.meta.env.VITE_GOOGLE_API;
   const apiMapId = import.meta.env.VITE_GOOGLE_MAP_ID;
   const defaultPosition = { lat: 37.48026943463089, lng: -122.15979710343754 };
-  //{ lat: 37.48026943463089, lng: -122.15979710343754 };
-  //37.29325940807385, -121.9491001477052;
   const [allLocations, setAllLocations] = useState([]);
+  const [highLowLocations, sethighLowLocations] = useState({});
   const [open, setOpen] = useState(null);
+  const [clusterOpen, setClusterOpen] = useState(false);
+  const [lowestPopulationOpen, setLowestPopulationOpen] = useState(false);
 
   const handleOpen = (mapId) => {
     setOpen((prev) => (prev === mapId ? null : mapId));
-  }
+  };
 
   const getLocations = async () => {
     try {
@@ -33,6 +34,19 @@ function HomePage({ userName }) {
       setAllLocations(data);
     } catch (error) {
       console.error("Error: Fetching locations", error);
+    }
+  };
+
+  const getHighLowLocations = async () => {
+    try {
+      const response = await fetch("http://localhost:3000/gridCluster", {
+        method: "GET",
+        credentials: "include",
+      });
+      const data = await response.json();
+      sethighLowLocations(data);
+    } catch (error) {
+      console.error("Error: Fetching high and low locations", error);
     }
   };
 
@@ -57,18 +71,39 @@ function HomePage({ userName }) {
 
   useEffect(() => {
     getLocations();
+    getHighLowLocations();
   }, []);
 
   const currentHour = new Date().getHours();
-  let greetingMessage;
+  const greetingMessage =
+    currentHour > 4 && currentHour < 12
+      ? "Good Morning, "
+      : currentHour >= 12 && currentHour < 17
+      ? "Good Afternoon, "
+      : "Good Evening, ";
 
-  if (currentHour > 4 && currentHour < 12) {
-    greetingMessage = "Good Morning, ";
-  } else if (currentHour >= 12 && currentHour < 17) {
-    greetingMessage = "Good Afternoon, ";
-  } else {
-    greetingMessage = "Good Evening, ";
-  }
+  const handleMapClick = async (event) => {
+    const locationInfo = {
+      lat: event.detail.latLng.lat,
+      lng: event.detail.latLng.lng,
+    };
+    console.log(locationInfo);
+  };
+
+  const isInsideCluster = (lat, lng) => {
+    const bounds = highLowLocations?.biggestCluster?.cells?.[0]?.bounds;
+    if (!bounds) return false;
+    return (
+      lat >= bounds.minLat &&
+      lat <= bounds.maxLat &&
+      lng >= bounds.minLng &&
+      lng <= bounds.maxLng
+    );
+  };
+
+  const clusteredUsers = allLocations.filter((loc) =>
+    isInsideCluster(loc.mapLat, loc.mapLong),
+  );
 
   return (
     <>
@@ -84,16 +119,19 @@ function HomePage({ userName }) {
 
       <div className="mapContainer">
         <APIProvider apiKey={apiKey}>
-          <div className="heatMap">
-            <Map
-              zoom={14}
-              center={defaultPosition}
-              mapId={apiMapId}
-              zoomControl={true}
-              gestureHandling="auto"
-              disableDefaultUI={false}
-            >
-              {allLocations.map((location) => (
+          <Map
+            className="heatMap"
+            defaultZoom={16}
+            defaultCenter={defaultPosition}
+            mapId={apiMapId}
+            onClick={handleMapClick}
+          >
+            {allLocations
+              .filter(
+                (location) =>
+                  !isInsideCluster(location.mapLat, location.mapLong),
+              )
+              .map((location) => (
                 <div key={location.mapId}>
                   <AdvancedMarker
                     position={{
@@ -112,21 +150,64 @@ function HomePage({ userName }) {
                         lat: location.mapLat,
                         lng: location.mapLong,
                       }}
-                      onClick={() => handleOpen(null)}
+                      onCloseClick={() => handleOpen(null)}
                     >
                       <div className="userPopUp">
                         <h1>{location.mapUserName}</h1>
                         <p>Location Set: {showTime(location.createTime)}</p>
-                        <p>
-                          Status Message: {location.message}
-                        </p>
+                        <p>Status Message: {location.message}</p>
                       </div>
                     </InfoWindow>
                   )}
                 </div>
               ))}
-            </Map>
-          </div>
+            {highLowLocations.highestPopulated && clusteredUsers.length > 0 && (
+              <AdvancedMarker
+                position={highLowLocations.highestPopulated}
+                onClick={() => setClusterOpen((prev) => !prev)}
+              >
+                <div className="highestPopulatedMarker">
+                  <i className="fa fa-users" />
+                </div>
+                {clusterOpen && (
+                  <InfoWindow
+                    position={highLowLocations.highestPopulated}
+                    onCloseClick={() => setClusterOpen(false)}
+                  >
+                    <div className="userPopUp">
+                      <h2>Clustered Users</h2>
+                      {clusteredUsers.map((user) => (
+                        <div>
+                          {user.mapUserName} - {showTime(user.createTime)}
+                        </div>
+                      ))}
+                    </div>
+                  </InfoWindow>
+                )}
+              </AdvancedMarker>
+            )}
+            {highLowLocations.leastPopulated && (
+              <AdvancedMarker
+                position={highLowLocations.leastPopulated}
+                onClick={() => setLowestPopulationOpen((prev) => !prev)}
+              >
+                <div className="leastPopulatedMarker">
+                  <i className="fa fa-map-pin"></i>
+                </div>
+                {lowestPopulationOpen &&
+                (
+                  <InfoWindow
+                    position={highLowLocations.leastPopulated}
+                    onCloseClick={() => setLowestPopulationOpen(false)}
+                  >
+                    <div className="lowestPopUp">
+                      <h2>Suggested Lowest Populated Area</h2>
+                    </div>
+                  </InfoWindow>
+                )}
+              </AdvancedMarker>
+            )}
+          </Map>
         </APIProvider>
       </div>
 
