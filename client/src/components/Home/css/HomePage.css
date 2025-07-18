@@ -31,3 +31,13 @@
     color: #3148F6;
     font-size: 2rem;
 }
+
+.highestPopulatedMarker {
+    color: green;
+    font-size: 3rem;
+}
+
+.leastPopulatedMarker {
+    color: orangered;
+    font-size: 3rem;
+}
