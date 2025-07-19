@@ -10,6 +10,7 @@ const groups = require("./routes/groups")
 const events = require("./routes/events")
 const scoreEvents = require("./recommendEvents/scoreEvents");
 const mapAnalytics = require("./mapAnalytics/gridCluster")
+const mapHistory = require("./mapAnalytics/mapHistory")
 app.use(express.json());
 
 app.use(
@@ -38,6 +39,7 @@ app.use("/", groups)
 app.use("/", events)
 app.use("/", scoreEvents);
 app.use("/", mapAnalytics)
+app.use("/", mapHistory);
 
 app.listen(PORT, () => {
   console.log(`SERVER IS RUNNING & ONLINE @ ${PORT}`);

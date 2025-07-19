@@ -47,7 +47,7 @@ export function checkPoint(point, cell) {
   return checkLat && checkLong;
 }
 
-function getNeighborIndices(cell) {
+export function getNeighborIndices(cell) {
   const directions = [
     [-1, 0],
     [1, 0],

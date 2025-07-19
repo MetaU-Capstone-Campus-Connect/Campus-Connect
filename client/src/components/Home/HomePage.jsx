@@ -84,10 +84,20 @@ function HomePage({ userName }) {
 
   const handleMapClick = async (event) => {
     const locationInfo = {
-      lat: event.detail.latLng.lat,
-      lng: event.detail.latLng.lng,
+      mapLat: event.detail.latLng.lat,
+      mapLong: event.detail.latLng.lng,
     };
-    console.log(locationInfo);
+    try {
+      const res = await fetch("http://localhost:3000/checkCellLocation", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(locationInfo),
+      });
+    } catch (error) {
+      console.error("Error: User click location", error);
+    }
   };
 
   const isInsideCluster = (lat, lng) => {
@@ -194,7 +204,7 @@ function HomePage({ userName }) {
                 <div className="leastPopulatedMarker">
                   <i className="fa fa-map-pin"></i>
                 </div>
-                {lowestPopulationOpen &&
+                {lowestPopulationOpen && 
                 (
                   <InfoWindow
                     position={highLowLocations.leastPopulated}

@@ -22,11 +22,12 @@ model Users {
 
 model Map {
   mapId       Int      @id @default(autoincrement())
-  mapUserName String   @unique
+  mapUserName String   
   mapLong     Float
   mapLat      Float
   createTime  DateTime @default(now())
   message     String?
+  status      MAPSTATUS @default(ACTIVE)
 }
 
 model Groups {
@@ -70,4 +71,9 @@ enum STATUS {
 enum RANK {
   ADMIN
   MEMBER
+}
+
+enum MAPSTATUS {
+  ACTIVE
+  PAST
 }
