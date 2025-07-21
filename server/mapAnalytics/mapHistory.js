@@ -17,46 +17,51 @@ const mapBorder = {
     { lat: 37.48215891264268, lng: -122.16750300387568 },
   ],
 };
-const COLS = 20;
-const ROWS = 20;
 
 router.post("/checkCellLocation", async (req, res) => {
+  const COLS = 20;
   try {
     const { mapLat, mapLong } = req.body;
     const clickedPoint = { mapLat, mapLong };
     const border = convertBorder(mapBorder.polygon);
     const grid = createGrid(border);
+    const dayCounts = Array(7).fill(0);
 
     const locations = await prisma.map.findMany({
       where: { status: "PAST" },
     });
 
     for (const loc of locations) {
+      const date = new Date(loc.createTime);
+      const day = date.getUTCDay();
+
       for (const cell of grid) {
         if (checkPoint(loc, cell)) {
-          cell.count += 1;
+          cell.totalCount += 1;
+          if (!cell.totalLocations) cell.totalLocations = [];
+          cell.totalLocations.push(loc);
+          if (checkPoint(clickedPoint, cell)) {
+            dayCounts[day]++;
+          }
+          break;
         }
       }
     }
+
     const matchingCell = grid.find((cell) => checkPoint(clickedPoint, cell));
     const neighbors = getNeighborIndices(matchingCell);
     const allCells = [
       matchingCell,
       ...neighbors.map(({ row, col }) => grid[row * COLS + col]),
     ];
-    const totalCount = allCells.reduce(
-      (sum, cell) => sum + (cell.count || 0), 0);
 
-    console.log(matchingCell);
-    console.log("nieghbor cells", allCells);
-    console.log("count", totalCount);
-    console.log("size", locations.length);
-    console.log("percentage", totalCount / locations.length);
+    const overallTotalCount = locations.filter((loc) =>
+      allCells.some((cell) => checkPoint(loc, cell))
+    ).length;
 
     res.json({
-      matchingCell,
-      neighborCells: allCells,
-      totalCount,
+      percentage: overallTotalCount / locations.length,
+      dayCounts,
     });
   } catch (error) {
     console.error(error);
