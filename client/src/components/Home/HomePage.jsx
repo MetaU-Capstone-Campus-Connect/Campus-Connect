@@ -2,6 +2,8 @@ import "../Home/css/HomePage.css";
 import Header from "../Header";
 import Footer from "../Footer";
 import SetLocation from "./SetLocation";
+import BarChart from "./BarChart";
+import MapClickModal from "./MapClickModal";
 import {
   APIProvider,
   Map,
@@ -19,6 +21,10 @@ function HomePage({ userName }) {
   const [open, setOpen] = useState(null);
   const [clusterOpen, setClusterOpen] = useState(false);
   const [lowestPopulationOpen, setLowestPopulationOpen] = useState(false);
+  const [dayCounts, setDayCounts] = useState(null);
+  const [chartMode, setChartMode] = useState(false);
+  const [modalStatus, setModalStatus] = useState(false);
+  const [locationPercentage, setLocationPercentage] = useState(null);
 
   const handleOpen = (mapId) => {
     setOpen((prev) => (prev === mapId ? null : mapId));
@@ -74,20 +80,23 @@ function HomePage({ userName }) {
     getHighLowLocations();
   }, []);
 
-  const currentHour = new Date().getHours();
-  const greetingMessage =
-    currentHour > 4 && currentHour < 12
-      ? "Good Morning, "
-      : currentHour >= 12 && currentHour < 17
-      ? "Good Afternoon, "
-      : "Good Evening, ";
-
   const handleMapClick = async (event) => {
-    const locationInfo = {
-      lat: event.detail.latLng.lat,
-      lng: event.detail.latLng.lng,
-    };
-    console.log(locationInfo);
+    if (!chartMode) return;
+    const mapLat = event.detail.latLng.lat;
+    const mapLong = event.detail.latLng.lng;
+    try {
+      const res = await fetch("http://localhost:3000/checkCellLocation", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ mapLat, mapLong }),
+      });
+      const data = await res.json();
+      setDayCounts(data.dayCounts);
+      setLocationPercentage(data.percentage);
+      setModalStatus(true);
+    } catch (error) {
+      console.error("Error: User click location", error);
+    }
   };
 
   const isInsideCluster = (lat, lng) => {
@@ -109,12 +118,14 @@ function HomePage({ userName }) {
     <>
       <Header userName={userName} />
       <div className="homePageWelcome">
-        {greetingMessage}
-        {userName}
+        Welcome Back, {userName}
       </div>
 
       <div className="setLocationButton">
         <SetLocation userName={userName} getLocations={getLocations} />
+        <button onClick={() => setChartMode((prev) => !prev)}>
+          {chartMode ? "Exit Map History Mode" : "Map History Mode"}
+        </button>
       </div>
 
       <div className="mapContainer">
@@ -210,6 +221,12 @@ function HomePage({ userName }) {
           </Map>
         </APIProvider>
       </div>
+      <MapClickModal
+        modalStatus={modalStatus}
+        setModalStatus={setModalStatus}
+        locationPercentage={locationPercentage}
+      />
+      <BarChart counts={dayCounts} />
 
       <Footer />
     </>
