@@ -3,7 +3,7 @@ const router = express.Router();
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 
-// GET SELF USER PROFILE
+// GET USER PROFILE
 router.get("/users/:name", async (req, res) => {
   const userName = req.params.name;
   try {
@@ -11,6 +11,14 @@ router.get("/users/:name", async (req, res) => {
       where: {
         userName: userName,
       },
+      include: {
+        Events: true,
+        members: {
+          include: {
+            group: true,
+          }
+        }
+      }
     });
     res.json(user);
   } catch (error) {

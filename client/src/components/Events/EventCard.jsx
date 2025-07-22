@@ -1,4 +1,5 @@
 import "./css/EventCard.css";
+import UserHover from "../User/UserHover";
 
 function EventCard({ event, userName, onJoin }) {
   const hasJoined = event.eventUsers.some((user) => user.userName === userName);
@@ -35,7 +36,11 @@ function EventCard({ event, userName, onJoin }) {
 
       <b>RSVP List:</b>
       {event.eventUsers && event.eventUsers.length > 0 ? (
-        event.eventUsers.map((user) => <p>{user.userName}</p>)
+        event.eventUsers.map((user) => (
+          <UserHover userName={user.userName}>
+            <p>{user.userName}</p>
+          </UserHover>
+        ))
       ) : (
         <p>No RSVPs yet</p>
       )}
