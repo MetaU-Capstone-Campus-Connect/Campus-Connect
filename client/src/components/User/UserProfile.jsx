@@ -5,6 +5,7 @@ import Manage from "./Manage";
 import UserGroups from "./UserGroups";
 import UserEvents from "./UserEvents";
 import { useState } from "react";
+import formattedDate from "../../utils";
 
 function UserProfile({ userInfo, userName }) {
   if (!userInfo) {
@@ -16,16 +17,6 @@ function UserProfile({ userInfo, userName }) {
   const [profileUrl, setProfileUrl] = useState(userInfo.userProfileImg);
   const [status, setStatus] = useState(userInfo.userStatus);
   const [aboutMe, setAboutMe] = useState(userInfo.userBio);
-
-  const formattedDate = (release_date) => {
-    const options = {
-      weekday: "long",
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-    };
-    return new Date(release_date).toLocaleDateString(undefined, options);
-  };
 
   return (
     <>

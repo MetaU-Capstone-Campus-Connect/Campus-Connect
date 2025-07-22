@@ -1,7 +1,8 @@
 import "../Groups/css/GroupInfo.css";
 import { useState } from "react";
+import UserHover from "../User/UserHover";
 
-function GroupInfo({ group, userName, refreshGroups }) {
+function GroupInfo({ group, userName }) {
   const [modalStatus, setModalStatus] = useState(false);
   const [groupState, setGroupState] = useState(group);
 
@@ -83,12 +84,12 @@ function GroupInfo({ group, userName, refreshGroups }) {
                   {[...group.members]
                     .sort((a, b) => (a.rank === "ADMIN" ? -1 : 1))
                     .map((member) => (
-                      <div className="groupMemberList">
-                        <p key={member.userId}>
+                      <UserHover userName={member.user.userName}>
+                        <p className="groupMemberList">
                           {member.user.userName}
                           {member.rank === "ADMIN" && " (Group Leader)"}
                         </p>
-                      </div>
+                      </UserHover>
                     ))}
                 </div>
               </div>

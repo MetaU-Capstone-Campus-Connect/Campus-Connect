@@ -1,0 +1,36 @@
+.userHoverContainer {
+    position: relative;
+}
+
+.userHoverPreview {
+    position: absolute;
+    bottom: 100%;
+    background: #1C2127;
+    z-index: 1000;
+    width: fit-content;
+    height: fit-content;
+    padding: 15px;
+    border-radius: 5px;
+    text-align: center;
+}
+
+.userHoverBottomDiv {
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+
+.userHoverBottomParent {
+    margin-top: 15px;
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    justify-content: space-evenly;
+}
+
+.userHoverBottomEvents {
+    flex-direction: column;
+}
+
+.userHoverBottomGroups {
+    flex-direction: column;
+}
