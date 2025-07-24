@@ -11,17 +11,10 @@ const {
   mapDays,
   scoreDays,
   scoreAvailability,
+  mapGroupMutuals,
+  scoreGroupMutuals,
+  getScoreWeight,
 } = require("./scoringMethods");
-
-const scoreWeight = {
-  title: 0.25,
-  availability: 0.2,
-  users: 0.2,
-  location: 0.1,
-  info: 0.05,
-  days: 0.05,
-  hosts: 0.05,
-};
 
 router.get("/user/:userName/scoreEvents", async (req, res) => {
   const { userName } = req.params;
@@ -37,6 +30,19 @@ router.get("/user/:userName/scoreEvents", async (req, res) => {
             eventUsers: true,
           },
         },
+        members: {
+          include: {
+            group: {
+              include: {
+                members: {
+                  include: {
+                    user: true,
+                  }
+                }
+              }
+            }
+          }
+        }
       },
     });
 
@@ -64,13 +70,16 @@ router.get("/user/:userName/scoreEvents", async (req, res) => {
     const pastEvents = user.Events.filter(
       (event) => event.eventDate < currentDate
     );
+    const allGroupMutuals = user.members.map((member) => member.group);
     const pastTitles = pastEvents.map((event) => event.eventName);
     const pastDescriptions = pastEvents.map((event) => event.eventInfo);
     const pastLocations = pastEvents.map((event) => event.eventLocation);
     const mutualMap = mapMutuals(userName, pastEvents);
+    const mutualGroupMembers = mapGroupMutuals(userName, allGroupMutuals);
     const hostMap = mapHosts(userName, pastEvents);
     const dayMap = mapDays(pastEvents);
     const totalPastEvents = pastEvents.length;
+    const groupMembersSize = mutualGroupMembers.size;
 
     const scoreEvents = nonRsvpEvents.map((event) => {
       let titleMax = 0;
@@ -79,11 +88,12 @@ router.get("/user/:userName/scoreEvents", async (req, res) => {
       
       const eventUserList = event.eventUsers.map((user) => user.userName);
       const scoreUsers = scoreMutuals(eventUserList, mutualMap, userName);
+      const scoreGroupMembers = scoreGroupMutuals(eventUserList, mutualGroupMembers, userName);
       const eventHost = event.eventHost;
       const scoreHost = scoreHosts(eventHost, hostMap, totalPastEvents);
       const scoreDay = scoreDays(event.eventDate, dayMap, totalPastEvents);
       const scoreAvbl = scoreAvailability(event, rsvpEvents);
-      if (scoreAvbl === 0) {
+      if (scoreAvbl === 0 && rsvpEvents.length > 0) {
         return null;
       }
 
@@ -108,6 +118,7 @@ router.get("/user/:userName/scoreEvents", async (req, res) => {
         );
       }
 
+      const scoreWeight = getScoreWeight(totalPastEvents, groupMembersSize);
       const weightedTotal =
         scoreWeight.title * titleMax +
         scoreWeight.info * infoMax +
@@ -115,7 +126,8 @@ router.get("/user/:userName/scoreEvents", async (req, res) => {
         scoreWeight.users * scoreUsers +
         scoreWeight.hosts * scoreHost +
         scoreWeight.days * scoreDay +
-        scoreWeight.availability * scoreAvbl;
+        scoreWeight.availability * scoreAvbl +
+        scoreWeight.groupMembers * scoreGroupMembers;
 
       return {
         eventId: event.eventId,

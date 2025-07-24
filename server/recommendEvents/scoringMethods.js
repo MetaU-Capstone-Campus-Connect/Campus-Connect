@@ -22,6 +22,30 @@ export function mapMutuals(user, pastEvents) {
   return eventsPerWeekday;
 }
 
+export function mapGroupMutuals(user, allGroupMutuals) {
+  const groupMutualsMap = new Map();
+
+  for (const group of allGroupMutuals) {
+    for (const member of group.members) {
+      const groupMemberName = member.user.userName;
+      if (groupMemberName !== user) {
+        groupMutualsMap.set(groupMemberName, (groupMutualsMap.get(groupMemberName) || 0) + 1)
+      }
+    }
+  }
+  return groupMutualsMap;
+}
+
+export function scoreGroupMutuals(eventUserList, groupMutualMap, currentUserName) {
+  let score = 0;
+  for (const user of eventUserList) {
+    if (user !== currentUserName) {
+      score += groupMutualMap.get(user) || 0;
+    }
+  }
+  return (score / groupMutualMap.size || 0);
+}
+
 export function scoreMutuals(eventUserList, mutualsMap, currentUserName) {
   let score = 0;
   if (eventUserList.length === 0) {
@@ -108,4 +132,41 @@ export function scoreAvailability(event, rsvpEvents) {
   if (minGapAfterRSVPEvent > 6) return 0.50;
   if (minGapAfterRSVPEvent > 3) return 0.75;
   return 1.0;
+}
+
+export function getScoreWeight(totalPastEvents, groupMembersSize) {
+  if (totalPastEvents === 0 && groupMembersSize === 0) {
+    return {
+      title: 0,
+      availability: 1,
+      users: 0,
+      groupMembers: 0,
+      location: 0,
+      info: 0,
+      days: 0,
+      hosts: 0,
+    };
+  }
+  if (totalPastEvents === 0) {
+    return {
+      title: 0,
+      availability: 0.5,
+      users: 0,
+      groupMembers: 0.5,
+      location: 0,
+      info: 0,
+      days: 0,
+      hosts: 0,
+    };
+  }
+  return {
+    title: 0.25,
+    availability: 0.25,
+    users: 0.15,
+    groupMembers: 0.15,
+    location: 0.10,
+    info: 0.05,
+    days: 0.025,
+    hosts: 0.025,
+  };
 }
