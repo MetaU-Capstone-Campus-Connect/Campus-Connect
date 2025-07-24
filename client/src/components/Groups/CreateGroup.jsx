@@ -12,7 +12,7 @@ function CreateGroup({ userName, refreshGroups }) {
     setModalStatus(false);
   };
 
-  const handleUSubmit = async (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     const name = event.target.groupName.value;
     const desc = event.target.groupDesc.value;
@@ -43,7 +43,7 @@ function CreateGroup({ userName, refreshGroups }) {
       {modalStatus && (
         <div className="modalOverlay">
           <div className="modalContent">
-            <form onSubmit={handleUSubmit}>
+            <form onSubmit={handleSubmit}>
               <button className="exitButton" onClick={handleClose}>
                 <i className="fa fa-close"></i>
               </button>

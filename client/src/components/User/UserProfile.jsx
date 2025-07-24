@@ -5,7 +5,7 @@ import Manage from "./Manage";
 import UserGroups from "./UserGroups";
 import UserEvents from "./UserEvents";
 import { useState } from "react";
-import formattedDate from "../../utils";
+import formatDatetime from "../../utils";
 
 function UserProfile({ userInfo, userName }) {
   if (!userInfo) {
@@ -35,7 +35,7 @@ function UserProfile({ userInfo, userName }) {
           </div>
           <div className="accountDate">
             <b>Join Date: </b>
-            {formattedDate(userInfo.accountDate)}
+            {formatDatetime.formattedDate(userInfo.accountDate)}
           </div>
         </div>
 

@@ -1,7 +1,6 @@
-// src/components/Groups/UserHover.jsx
 import { useEffect, useState } from "react";
 import "../User/css/UserHover.css";
-import formattedDate from "../../utils";
+import formatDatetime from "../../utils";
 
 function UserHover({ userName, children }) {
   const [hovering, setHovering] = useState(false);
@@ -60,7 +59,9 @@ function UserHover({ userName, children }) {
             <h2>{userData.userName}</h2>
             <h4>Status: {userData.userStatus}</h4>
             <p>{userData.userBio}</p>
-            <p>Join Date: {formattedDate(userData.accountDate)}</p>
+            <p>
+              Join Date: {formatDatetime.formattedDate(userData.accountDate)}
+            </p>
             <div className="userHoverBottomParent">
               <div className="userHoverBottomEvents">
                 <h4>Events</h4>
