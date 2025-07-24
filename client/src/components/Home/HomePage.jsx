@@ -89,7 +89,6 @@ function HomePage({ userName }) {
   }, []);
 
   const handleMapClick = async (event) => {
-    setIsLoading(true);
     if (!chartMode) return;
     const mapLat = event.detail.latLng.lat;
     const mapLong = event.detail.latLng.lng;
@@ -105,8 +104,6 @@ function HomePage({ userName }) {
       setModalStatus(true);
     } catch (error) {
       console.error("Error: User click location", error);
-    } finally {
-      setIsLoading(false);
     }
   };
 
