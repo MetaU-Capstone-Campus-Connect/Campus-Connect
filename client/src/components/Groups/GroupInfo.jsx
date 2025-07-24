@@ -1,10 +1,12 @@
 import "../Groups/css/GroupInfo.css";
 import { useState } from "react";
 import UserHover from "../User/UserHover";
+import LoadingState from "../LoadingState";
 
 function GroupInfo({ group, userName }) {
   const [modalStatus, setModalStatus] = useState(false);
   const [groupState, setGroupState] = useState(group);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleOpen = () => {
     setModalStatus(true);
@@ -15,6 +17,7 @@ function GroupInfo({ group, userName }) {
   };
 
   const handleJoin = async () => {
+    setIsLoading(true);
     try {
       const response = await fetch(
         `http://localhost:3000/group/${groupState.groupId}/join`,
@@ -37,8 +40,14 @@ function GroupInfo({ group, userName }) {
       }
     } catch (error) {
       console.error("Error: Joining group", error);
+    } finally {
+      setIsLoading(false);
     }
   };
+
+  if (isLoading) {
+    return <LoadingState/>
+  }
 
   return (
     <div className="GroupInfo">

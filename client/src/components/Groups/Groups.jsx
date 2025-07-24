@@ -4,6 +4,7 @@ import Header from "../Header";
 import Footer from "../Footer";
 import CreateGroup from "./CreateGroup";
 import AllGroups from "./AllGroups";
+import LoadingState from "../LoadingState";
 
 function Groups({ userName }) {
   const [groups, setGroups] = useState([]);
@@ -11,6 +12,7 @@ function Groups({ userName }) {
   const [groupFilter, setGroupFitler] = useState(false);
   const [showMessage, setShowMessage] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const fetchAllGroups = () => {
     fetch("http://localhost:3000/groups")
@@ -40,6 +42,7 @@ function Groups({ userName }) {
   );
 
   const checkJoined = async () => {
+    setIsLoading(true);
     try {
       const response = await fetch(
         `http://localhost:3000/user/${userName}/groups`,
@@ -57,8 +60,14 @@ function Groups({ userName }) {
       }
     } catch (error) {
       console.error("Error : Fetching user joined groups", error);
+    } finally {
+      setIsLoading(false);
     }
   };
+
+  if (isLoading) {
+    return <LoadingState/>
+  }
 
   return (
     <div className="Groups">
