@@ -1,4 +1,4 @@
-import { use, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import "../Events/css/CalendarEvents.css";
 import EventCard from "./EventCard";
 import formatDateTime from "../../utils";
@@ -169,7 +169,8 @@ function CalendarEvents({ userName }) {
           ) : (
             <div className="timelineContainer">
               <div className="timelineLine"></div>
-              {filteredEvents.map((event) => (
+              {[...filteredEvents].sort((a,b) => new Date(a.eventDate) - new Date(b.eventDate))
+              .map((event) => (
                 <EventCard
                   event={event}
                   userName={userName}

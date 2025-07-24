@@ -69,11 +69,7 @@ function RecommendedEvents({ userName }) {
           <p>Sorry, you don't have any recommended events at this moment!</p>
         ) : (
           [...recommended]
-            .sort((a, b) => {
-              const scoreA = a.scoreTitle + a.scoreInfo + a.scoreLocation;
-              const scoreB = b.scoreTitle + b.scoreInfo + b.scoreLocation;
-              return scoreB - scoreA;
-            })
+            .sort((a, b) => b.weightedTotal - a.weightedTotal)
             .slice(0, 5)
             .map((event) => (
               <EventCard

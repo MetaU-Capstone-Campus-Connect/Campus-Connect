@@ -1,11 +1,13 @@
-function formattedDate(release_date) {
+function formattedDate(date) {
   const options = {
     weekday: "long",
     year: "numeric",
     month: "long",
     day: "numeric",
   };
-  return new Date(release_date).toLocaleDateString(undefined, options);
+  const [year, month, day] = date.split('-');
+  const dateFormatted = new Date(year, month -1, day);
+  return dateFormatted.toLocaleDateString(undefined, options);
 };
 
 function formattedTime(eventDate) {

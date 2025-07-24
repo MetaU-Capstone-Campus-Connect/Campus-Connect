@@ -102,7 +102,7 @@ function CreateEvent({ userName }) {
                 placeholder="Enter Event Location"
               />
               <input
-                type="text"
+                type="number"
                 name="eventLength"
                 required
                 placeholder="Enter Event Length (Hours)"
