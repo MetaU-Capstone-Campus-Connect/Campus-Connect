@@ -4,18 +4,6 @@
     justify-content: center;
 }
 
-.listDays {
-    margin-top: 40px;
-    display: flex;
-    flex-wrap: wrap;
-    flex-direction: row;
-    justify-content: space-evenly;
-    background-color: white;
-    border: 2px solid #1C2127;
-    border-radius: 15px;
-    padding: 20px;
-}
-
 .day {
     display: flex;
     flex-wrap: wrap;
@@ -27,31 +15,42 @@
     padding: 15px;
     gap: 20px;
     border-radius: 10px;
-    background-color: #1C4B8F;
-    border-color: #1C2127;
+    background-color: #1c4b8f;
+    border-color: #1c2127;
     border-style: solid;
     color: white;
 }
 
 .dayTitle {
-    font-size: 20px;
+    font-size: 23px;
+}
+
+.listDaysWrapper {
+    overflow: hidden;
+    width: 100%;
+    position: relative;
+}
+
+.dateNavigator {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
 }
 
 .controlDirection {
     display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    margin-top: 10px;
-    margin-left: 10px;
-    margin-right: 10px;
+    justify-content: center;
+    gap: 20px;
+    width: 100%;
 }
 
 .eventsContainer {
     display: flex;
-    flex-direction: row;
     flex-wrap: wrap;
-    gap: 30px;
+    flex-direction: column;
+    gap: 2px;
     justify-content: center;
+    align-items: center;
     margin-bottom: 150px;
 }
 
@@ -59,5 +58,89 @@
     border: none;
     font-size: 30px;
     color: black;
-    background-color: #E9E9E9;
+    background: none;
+}
+
+.listDaysContainer {
+    position: relative;
+    width: 100%;
+    height: auto;
+    overflow: hidden;
+    min-height: 200px;
+}
+
+.listDays {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    justify-content: space-evenly;
+}
+
+.listDaysContainer.right .currentSet {
+    animation: slideOutRight 1.5s forwards;
+}
+
+.listDaysContainer.right .nextSet {
+    animation: slideInFromLeft 1.5s forwards;
+}
+
+.listDaysContainer.left .currentSet {
+    animation: slideOutLeft 1.5s forwards;
+}
+
+.listDaysContainer.left .nextSet {
+    animation: slideInFromRight 1.5s forwards;
+}
+
+@keyframes slideInFromLeft {
+    from {
+        transform: translateX(-100%);
+    }
+
+    to {
+        transform: translateX(0%);
+    }
+}
+
+@keyframes slideInFromRight {
+    from {
+        transform: translateX(100%);
+    }
+
+    to {
+        transform: translateX(0%);
+    }
+}
+
+@keyframes slideOutLeft {
+    from {
+        transform: translateX(0%);
+    }
+
+    to {
+        transform: translateX(-100%);
+    }
+}
+
+@keyframes slideOutRight {
+    from {
+        transform: translateX(0%);
+    }
+
+    to {
+        transform: translateX(100%);
+    } 
+}
+
+.currentSelectedDay {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    font-size: 25px;
 }
