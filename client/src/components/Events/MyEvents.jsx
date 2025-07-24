@@ -1,12 +1,15 @@
 import "../Events/css/MyEvents.css";
 import { useEffect, useState } from "react";
 import EventCard from "./EventCard";
+import LoadingState from "../LoadingState";
 
 function MyEvents({ userName }) {
   const [rsvpEvents, setRsvpEvents] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const fetchMyEvents = async () => {
+      setIsLoading(true);
       try {
         const response = await fetch(
           `http://localhost:3000/user/${userName}/events`,
@@ -20,10 +23,16 @@ function MyEvents({ userName }) {
         setRsvpEvents(futureEvents);
       } catch (error) {
         console.error("Error: Fetching upcoming future events", error);
+      } finally {
+        setIsLoading(false);
       }
     };
     fetchMyEvents();
   }, [userName]);
+
+  if (isLoading) {
+    return <LoadingState/>
+  }
 
   return (
     <div className="MyEvents">

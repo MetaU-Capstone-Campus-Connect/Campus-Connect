@@ -1,9 +1,11 @@
 import "../User/css/ManageProfileImg.css";
 import { useState } from "react";
+import LoadingState from "../LoadingState";
 
 function ManageProfileImg({ userInfo, setProfileUrl }) {
   const [modalStatus, setModalStatus] = useState(false);
   const userName = userInfo.userName;
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleOpen = () => {
     setModalStatus(true);
@@ -14,6 +16,7 @@ function ManageProfileImg({ userInfo, setProfileUrl }) {
   };
 
   const handleUpdate = async (event) => {
+    setIsLoading(true)
     event.preventDefault();
     const imgURL = event.target.imgURL.value;
     try {
@@ -31,8 +34,14 @@ function ManageProfileImg({ userInfo, setProfileUrl }) {
       }
     } catch (error) {
       console.error("ERROR: Updating user profile img-> ", error);
+    } finally {
+      setIsLoading(false);
     }
   };
+
+  if (isLoading) {
+    return <LoadingState/>
+  }
 
   return (
     <div className="ManageProfileImg">

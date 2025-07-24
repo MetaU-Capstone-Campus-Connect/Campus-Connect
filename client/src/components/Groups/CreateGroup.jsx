@@ -1,8 +1,10 @@
 import "../Groups/css/CreateGroup.css";
 import { useState } from "react";
+import LoadingState from "../LoadingState";
 
 function CreateGroup({ userName, refreshGroups }) {
   const [modalStatus, setModalStatus] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleOpen = () => {
     setModalStatus(true);
@@ -12,7 +14,8 @@ function CreateGroup({ userName, refreshGroups }) {
     setModalStatus(false);
   };
 
-  const handleUSubmit = async (event) => {
+  const handleSubmit = async (event) => {
+    setIsLoading(true);
     event.preventDefault();
     const name = event.target.groupName.value;
     const desc = event.target.groupDesc.value;
@@ -34,8 +37,14 @@ function CreateGroup({ userName, refreshGroups }) {
       }
     } catch (error) {
       console.error("ERROR: Creating a new study group ", error);
+    } finally {
+      setIsLoading(false);
     }
   };
+
+  if (isLoading) {
+    return <LoadingState/>
+  }
 
   return (
     <div className="CreateGroup">
@@ -43,7 +52,7 @@ function CreateGroup({ userName, refreshGroups }) {
       {modalStatus && (
         <div className="modalOverlay">
           <div className="modalContent">
-            <form onSubmit={handleUSubmit}>
+            <form onSubmit={handleSubmit}>
               <button className="exitButton" onClick={handleClose}>
                 <i className="fa fa-close"></i>
               </button>

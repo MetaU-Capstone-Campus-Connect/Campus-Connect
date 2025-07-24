@@ -2,16 +2,19 @@ import "../Home/css/SignUp.css";
 import Footer from "../Footer";
 import { Link, useNavigate } from "react-router";
 import { useState } from "react";
+import LoadingState from "../LoadingState";
 
 function SignUp({ setUserName, setUserInfo }) {
   const [signUpMessage, setSignUpMessage] = useState("");
   const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
 
   const clearState = () => {
     setSignUpMessage("");
   };
 
   const handleSubmit = async (event) => {
+    setIsLoading(true);
     event.preventDefault();
     const userName = event.target.name.value;
     const userPwd = event.target.pwd.value;
@@ -42,8 +45,14 @@ function SignUp({ setUserName, setUserInfo }) {
       }
     } catch (error) {
       console.error("ERROR: Creating a user on front-end -> ", error);
+    } finally {
+      setIsLoading(false);
     }
   };
+
+  if (isLoading) {
+    return <LoadingState/>
+  }
 
   return (
     <>

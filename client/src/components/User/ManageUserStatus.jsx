@@ -1,9 +1,11 @@
 import "../User/css/ManageUserStatus.css";
 import { useState } from "react";
+import LoadingState from "../LoadingState";
 
 function ManageUserStatus({ userInfo, setStatus }) {
   const [modalStatus, setModalStatus] = useState(false);
   const userName = userInfo.userName;
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleOpen = () => {
     setModalStatus(true);
@@ -14,6 +16,7 @@ function ManageUserStatus({ userInfo, setStatus }) {
   };
 
   const handleUpdate = async (status) => {
+    setIsLoading(true);
     try {
       const response = await fetch(
         `http://localhost:3000/users/${userName}/status`,
@@ -29,8 +32,14 @@ function ManageUserStatus({ userInfo, setStatus }) {
       }
     } catch (error) {
       console.error("ERROR: Updating user profile img-> ", error);
+    } finally {
+      setIsLoading(false);
     }
   };
+
+  if (isLoading) {
+    return <LoadingState/>
+  }
 
   return (
     <div className="ManageUserStatus">

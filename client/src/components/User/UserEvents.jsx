@@ -1,10 +1,13 @@
 import "../User/css/UserEvents.css";
 import { useState, useEffect } from "react";
+import LoadingState from "../LoadingState";
 
 function UserEvents({ userName }) {
   const [userEvents, setUserEvents] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   const fetchJoinedEvents = async () => {
+    setIsLoading(true);
     try {
       const response = await fetch(
         `http://localhost:3000/user/${userName}/events`,
@@ -13,12 +16,18 @@ function UserEvents({ userName }) {
       setUserEvents(data);
     } catch (error) {
       console.error("Error fetching user events:", error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
   useEffect(() => {
     fetchJoinedEvents();
   }, []);
+
+  if (isLoading) {
+    return <LoadingState/>
+  }
 
   return (
     <div className="UserEvents">

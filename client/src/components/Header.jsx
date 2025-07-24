@@ -1,10 +1,14 @@
 import "../components/css/Header.css";
 import { Link, useNavigate } from "react-router";
+import { useState } from "react";
+import LoadingState from "./LoadingState";
 
 function Header({ userName }) {
   const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false)
 
   const deleteSession = async () => {
+    setIsLoading(true)
     try {
       const response = await fetch("http://localhost:3000/logout", {
         method: "POST",
@@ -15,6 +19,8 @@ function Header({ userName }) {
       }
     } catch (error) {
       console.error("Error: Deleting user session:");
+    } finally {
+      setIsLoading(false)
     }
   };
 
@@ -40,6 +46,10 @@ function Header({ userName }) {
     },
     { name: "Log Out", path: "/", icon: "fa fa-sign-out", call: deleteSession },
   ];
+
+  if (isLoading) {
+    return <LoadingState/>
+  }
 
   return (
     <div className="Header">

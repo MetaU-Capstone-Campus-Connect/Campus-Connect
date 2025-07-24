@@ -2,9 +2,11 @@ import "../Home/css/Login.css";
 import Footer from "../Footer";
 import { Link, useNavigate } from "react-router";
 import { useState } from "react";
+import LoadingState from "../LoadingState";
 
 function Login({ setUserName, setUserInfo }) {
   const [loginMessage, setLoginMessage] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
   const clearState = () => {
@@ -13,6 +15,7 @@ function Login({ setUserName, setUserInfo }) {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    setIsLoading(true);
     const userName = event.target.name.value;
     const userPwd = event.target.pwd.value;
     const newUser = { userName, userPwd };
@@ -35,8 +38,14 @@ function Login({ setUserName, setUserInfo }) {
       }
     } catch (error) {
       console.error("ERROR: Logging in a user on front-end -> ", error);
+    } finally {
+      setIsLoading(false);
     }
   };
+
+  if (isLoading) {
+    return <LoadingState/>
+  }
 
   return (
     <>

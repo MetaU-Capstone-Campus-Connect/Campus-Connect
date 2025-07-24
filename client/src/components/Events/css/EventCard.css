@@ -1,4 +1,4 @@
-.eventCard {
+.eventCard{
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
@@ -14,4 +14,125 @@
     border-color: #1C2127;
     border-style: solid;
     color: white;
+}
+
+.eventCardMain {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    flex-direction: row;
+    margin-top: 25px;
+    margin-bottom: 25px;
+    padding: 25px;
+    gap: 20px;
+    width: 1000px;
+    border-radius: 10px;
+    background-color: #1C4B8F;
+    border-color: #1C2127;
+    border-style: solid;
+    color: white;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.timelineContainer {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.timelineLine {
+    position: absolute;
+    left: -50px;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    background-color: #1C2127;
+}
+
+.timelineTime {
+    position: relative;
+    z-index: 6;
+    width: 100px;
+    text-align: center;
+    background-color: #1C4B8F;
+    color: white;
+    border-radius: 20px;
+    padding: 4px 8px;
+    margin: 10px 0;
+    left: -70px; 
+}
+
+.eventCardContainer {
+    display: flex;
+    align-items: center;
+}
+
+.eventCardTimeline {
+    position: relative;
+    width: 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-right: 15px;
+}
+
+.eventCardMain:hover {
+    transform: scale(1.05);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+    z-index: 5;
+    position: relative; 
+}
+
+
+.eventCardImg {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+}
+
+.eventCardCenterInfo {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 350px;
+}
+
+.eventCardLeftSide {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.eventCardRightSide {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.eventCardRSVP {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.eventCardContainer:hover .timelineTime {
+    animation: pulse 1s ease infinite;
+}
+
+@keyframes pulse {
+    100% {
+        transform: scale(1.1);
+        box-shadow: 0 0 10px #1C4B8F;
+    }
+
+    50% {
+        transform: scale(1.15);
+        box-shadow: 0 0 20px #1C4B8F;
+    }
 }

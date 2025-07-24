@@ -4,6 +4,7 @@ import Footer from "../Footer";
 import SetLocation from "./SetLocation";
 import BarChart from "./BarChart";
 import MapClickModal from "./MapClickModal";
+import LoadingState from "../LoadingState";
 import {
   APIProvider,
   Map,
@@ -25,12 +26,14 @@ function HomePage({ userName }) {
   const [chartMode, setChartMode] = useState(false);
   const [modalStatus, setModalStatus] = useState(false);
   const [locationPercentage, setLocationPercentage] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleOpen = (mapId) => {
     setOpen((prev) => (prev === mapId ? null : mapId));
   };
 
   const getLocations = async () => {
+    setIsLoading(true);
     try {
       const response = await fetch("http://localhost:3000/getLocations", {
         method: "GET",
@@ -40,10 +43,13 @@ function HomePage({ userName }) {
       setAllLocations(data);
     } catch (error) {
       console.error("Error: Fetching locations", error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
   const getHighLowLocations = async () => {
+    setIsLoading(true);
     try {
       const response = await fetch("http://localhost:3000/gridCluster", {
         method: "GET",
@@ -53,6 +59,8 @@ function HomePage({ userName }) {
       sethighLowLocations(data);
     } catch (error) {
       console.error("Error: Fetching high and low locations", error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -113,6 +121,10 @@ function HomePage({ userName }) {
   const clusteredUsers = allLocations.filter((loc) =>
     isInsideCluster(loc.mapLat, loc.mapLong),
   );
+
+  if (isLoading) {
+    return <LoadingState/>
+  }
 
   return (
     <>
