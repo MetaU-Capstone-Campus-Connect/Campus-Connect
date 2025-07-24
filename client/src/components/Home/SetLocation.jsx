@@ -1,8 +1,10 @@
 import "../Home/css/SetLocation.css";
 import { useState } from "react";
+import LoadingState from "../LoadingState";
 
 function SetLocation({ userName, getLocations }) {
   const [modalStatus, setModalStatus] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleOpen = () => {
     setModalStatus(true);
@@ -13,6 +15,7 @@ function SetLocation({ userName, getLocations }) {
   };
 
   const addLocation = async (event) => {
+    setIsLoading(true);
     event.preventDefault();
     const statusMesage = event.target.status.value;
     navigator.geolocation.getCurrentPosition(async (position) => {
@@ -37,11 +40,14 @@ function SetLocation({ userName, getLocations }) {
         }
       } catch (error) {
         console.error("Error: Adding location on the front end", error);
+      } finally {
+        setIsLoading(false);
       }
     });
   };
 
   const deleteLocation = async (user) => {
+    setIsLoading(true);
     try {
       const response = await fetch("http://localhost:3000/deleteLocation", {
         method: "DELETE",
@@ -56,8 +62,14 @@ function SetLocation({ userName, getLocations }) {
       }
     } catch (error) {
       console.error("Error: Deleting location on the front end", error);
+    } finally {
+      setIsLoading(false);
     }
   }
+
+  if (isLoading) {
+    return <LoadingState/>
+  };
 
   return (
     <div className="SetLocation">
