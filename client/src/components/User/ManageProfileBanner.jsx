@@ -1,9 +1,11 @@
 import "../User/css/ManageProfileBanner.css";
 import { useState } from "react";
+import LoadingState from "../LoadingState";
 
 function ManageProfileBanner({ userInfo, setBannerUrl }) {
   const [modalStatus, setModalStatus] = useState(false);
   const userName = userInfo.userName;
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleOpen = () => {
     setModalStatus(true);
@@ -14,6 +16,7 @@ function ManageProfileBanner({ userInfo, setBannerUrl }) {
   };
 
   const handleUpdate = async (event) => {
+    setIsLoading(true);
     event.preventDefault();
     const bannerURL = event.target.bannerURL.value;
 
@@ -32,8 +35,14 @@ function ManageProfileBanner({ userInfo, setBannerUrl }) {
       }
     } catch (error) {
       console.error("ERROR: Updating user profile banner-> ", error);
+    } finally {
+      setIsLoading(false);
     }
   };
+
+  if (isLoading) {
+    return <LoadingState/>
+  }
 
   return (
     <div className="ManageProfileBanner">

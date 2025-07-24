@@ -1,10 +1,13 @@
 import "../User/css/UserGroups.css";
 import { useState, useEffect } from "react";
+import LoadingState from "../LoadingState";
 
 function UserGroups({ userName }) {
   const [userGroups, setUserGroups] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   const fetchJoinedGroups = async () => {
+    setIsLoading(true);
     try {
       const response = await fetch(
         `http://localhost:3000/user/${userName}/groups`,
@@ -13,12 +16,18 @@ function UserGroups({ userName }) {
       setUserGroups(data);
     } catch (error) {
       console.error("Error fetching user groups:", error);
+    } finally {
+      setIsLoading(false)
     }
   };
 
   useEffect(() => {
     fetchJoinedGroups();
   }, []);
+
+  if (isLoading) {
+    return <LoadingState/>
+  }
 
   return (
     <div className="UserGroups">

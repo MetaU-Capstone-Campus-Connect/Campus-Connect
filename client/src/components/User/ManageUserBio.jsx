@@ -1,9 +1,11 @@
 import "../User/css/ManageUserBio.css";
 import { useState } from "react";
+import LoadingState from "../LoadingState";
 
 function ManageUserBio({ userInfo, setAboutMe }) {
   const [modalStatus, setModalStatus] = useState(false);
   const userName = userInfo.userName;
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleOpen = () => {
     setModalStatus(true);
@@ -14,6 +16,7 @@ function ManageUserBio({ userInfo, setAboutMe }) {
   };
 
   const handleUpdate = async (event) => {
+    setIsLoading(true);
     event.preventDefault();
     const newBio = event.target.aboutMe.value;
     try {
@@ -31,8 +34,14 @@ function ManageUserBio({ userInfo, setAboutMe }) {
       }
     } catch (error) {
       console.error("ERROR: Updating user profile img-> ", error);
+    } finally {
+      setIsLoading(false);
     }
   };
+
+  if (isLoading) {
+    return <LoadingState/>
+  }
 
   return (
     <div className="ManageUserBio">
