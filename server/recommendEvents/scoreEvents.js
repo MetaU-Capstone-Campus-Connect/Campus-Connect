@@ -83,6 +83,9 @@ router.get("/user/:userName/scoreEvents", async (req, res) => {
       const scoreHost = scoreHosts(eventHost, hostMap, totalPastEvents);
       const scoreDay = scoreDays(event.eventDate, dayMap, totalPastEvents);
       const scoreAvbl = scoreAvailability(event, rsvpEvents);
+      if (scoreAvbl === 0) {
+        return null;
+      }
 
       for (const pastTitle of pastTitles) {
         titleMax = Math.max(
@@ -126,7 +129,7 @@ router.get("/user/:userName/scoreEvents", async (req, res) => {
         eventImg: event.eventImg,
         weightedTotal: weightedTotal,
       };
-    });
+    }).filter((event) => event !== null);
 
     res.status(200).json(scoreEvents);
   } catch (error) {

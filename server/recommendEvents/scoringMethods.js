@@ -10,16 +10,16 @@ export function scoreSimilarity(upcomingEvents, pastEvents) {
 }
 
 export function mapMutuals(user, pastEvents) {
-  const map = new Map();
+  const eventsPerWeekday = new Map();
 
   for (const event of pastEvents) {
     for (const mutual of event.eventUsers.map((user) => user.userName)) {
       if (mutual !== user) {
-        map.set(mutual, (map.get(mutual) || 0) + 1);
+        eventsPerWeekday.set(mutual, (eventsPerWeekday.get(mutual) || 0) + 1);
       }
     }
   }
-  return map;
+  return eventsPerWeekday;
 }
 
 export function scoreMutuals(eventUserList, mutualsMap, currentUserName) {
@@ -61,8 +61,8 @@ export function mapDays(pastEvents) {
 
   for (const event of pastEvents) {
     const date = new Date(event.eventDate);
-    const day = date.toLocaleString("en-US", {weekday: "long"})
-    map.set(day, (map.get(day) || 0) + 1)
+    const eventWeekday = date.toLocaleString("en-US", { weekday: "long" });
+    map.set(eventWeekday, (map.get(eventWeekday) || 0) + 1);
   }
   return map;
 }
@@ -72,9 +72,9 @@ export function scoreDays(eventDate, mapDays, totalPastEvents) {
     return 0;
   }
   const date = new Date(eventDate);
-  const day = date.toLocaleString("en-US", { weekday: "long" });
-  const daysTotal = mapDays.get(day) || 0;
-  return (daysTotal / totalPastEvents) || 0 ;
+  const eventWeekday = date.toLocaleString("en-US", { weekday: "long" });
+  const totalEventsOnEventWeekday = mapDays.get(eventWeekday) || 0;
+  return totalEventsOnEventWeekday / totalPastEvents || 0;
 }
 
 export function scoreAvailability(event, rsvpEvents) {
@@ -82,20 +82,30 @@ export function scoreAvailability(event, rsvpEvents) {
     return 0;
   }
 
-  const HOURS = 1000 * 60 * 60;
-  const eventTime = new Date(event.eventDate).getTime();
+  const SECONDS_IN_HOUR = 1000 * 60 * 60;
+  const eventStartTime = new Date(event.eventDate).getTime();
+  const eventEndTime = eventStartTime + (event.eventLength || 1) * SECONDS_IN_HOUR; 
 
-  const availability = rsvpEvents.map((rsvp) => {
+  for (const rsvp of rsvpEvents) {
+    const rsvpEventStartTime = new Date(rsvp.eventDate).getTime();
+    const rsvpEventEndTime = rsvpEventStartTime + (rsvp.eventLength || 1) * SECONDS_IN_HOUR;
+    const eventIsOverlapping = eventStartTime < rsvpEventEndTime && eventEndTime > rsvpEventStartTime;
+    if (eventIsOverlapping) {
+      return 0.0;
+    }
+  }
+
+  const gapAfterRSVPEvents = rsvpEvents.map((rsvp) => {
     const rsvpStart = new Date(rsvp.eventDate).getTime();
-    const rsvpEnd = rsvpStart + (rsvp.eventLength || 1) * HOURS;
-    return Math.abs(eventTime - rsvpEnd) / HOURS;
+    const rsvpEnd = rsvpStart + (rsvp.eventLength || 1) * SECONDS_IN_HOUR;
+    return Math.abs(eventStartTime - rsvpEnd) / SECONDS_IN_HOUR;
   });
 
-  const minGap = Math.min(...availability);
+  const minGapAfterRSVPEvent = Math.min(...gapAfterRSVPEvents);
 
-  if (minGap > 24) return 0.0;
-  if (minGap > 12) return 0.25;
-  if (minGap > 6) return 0.5;
-  if (minGap > 3) return 0.75;
+  if (minGapAfterRSVPEvent > 24) return 0.10;
+  if (minGapAfterRSVPEvent > 12) return 0.25;
+  if (minGapAfterRSVPEvent > 6) return 0.50;
+  if (minGapAfterRSVPEvent > 3) return 0.75;
   return 1.0;
 }
