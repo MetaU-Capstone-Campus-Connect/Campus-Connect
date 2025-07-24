@@ -1,12 +1,15 @@
 import "../Events/css/CreateEvent.css";
 import { useState } from "react";
+import LoadingState from "../LoadingState";
 
 function CreateEvent({ userName }) {
   const [modalStatus, setModalStatus] = useState(false);
   const [adminGroups, setAdminGroups] = useState([]);
   const [selectedGroupId, setSelectedGroupId] = useState();
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleOpen = async () => {
+    setIsLoading(true);
     setModalStatus(true);
     try {
       const res = await fetch(`http://localhost:3000/user/${userName}/admin`);
@@ -14,6 +17,8 @@ function CreateEvent({ userName }) {
       setAdminGroups(groups);
     } catch (err) {
       console.error("Error: Fetching admin groups", err);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -23,6 +28,7 @@ function CreateEvent({ userName }) {
   };
 
   const handleSubmit = async (event) => {
+    setIsLoading(true);
     event.preventDefault();
     const name = event.target.eventName.value;
     const info = event.target.eventInfo.value;
@@ -52,8 +58,14 @@ function CreateEvent({ userName }) {
       }
     } catch (error) {
       console.error("ERROR: Creating a new event ", error);
+    } finally {
+      setIsLoading(false)
     }
   };
+
+  if (isLoading) {
+    return <LoadingState/>
+  }
 
   return (
     <div className="CreateEvent">

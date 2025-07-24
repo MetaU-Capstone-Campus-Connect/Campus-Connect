@@ -1,12 +1,15 @@
 import "../Events/css/RecommendedEvents.css";
 import { useState, useEffect } from "react";
 import EventCard from "./EventCard";
+import LoadingState from "../LoadingState";
 
 function RecommendedEvents({ userName }) {
   const [recommended, setRecommended] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const fetchRecommended = async () => {
+      setIsLoading(true);
       try {
         const response = await fetch(
           `http://localhost:3000/user/${userName}/scoreEvents`,
@@ -15,12 +18,15 @@ function RecommendedEvents({ userName }) {
         setRecommended(data);
       } catch (error) {
         console.error("Error: Fetching recommended events", error);
+      } finally {
+        setIsLoading(false);
       }
     };
     fetchRecommended();
   }, [userName]);
 
   const handleJoin = async (eventId) => {
+    setIsLoading(true);
     try {
       const response = await fetch(
         `http://localhost:3000/event/${eventId}/join`,
@@ -46,8 +52,14 @@ function RecommendedEvents({ userName }) {
       }
     } catch (error) {
       console.error("Error: Joining recommended component event", error);
+    } finally {
+      setIsLoading(false);
     }
   };
+
+  if (isLoading) {
+    return <LoadingState/>
+  }
 
   return (
     <div className="RecommendedEvents">

@@ -1,7 +1,8 @@
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 import "../Events/css/CalendarEvents.css";
 import EventCard from "./EventCard";
 import formatDateTime from "../../utils";
+import LoadingState from "../LoadingState";
 
 function CalendarEvents({ userName }) {
   const dayList = [
@@ -19,6 +20,7 @@ function CalendarEvents({ userName }) {
   const [selectedDate, setSelectedDate] = useState(today);
   const [slideDirection, setSlideDirection] = useState(null);
   const [isSliding, setIsSliding] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     fetch("http://localhost:3000/events")
@@ -76,6 +78,7 @@ function CalendarEvents({ userName }) {
   };
 
   const handleJoin = async (eventId) => {
+    setIsLoading(true);
     try {
       const response = await fetch(
         `http://localhost:3000/event/${eventId}/join`,
@@ -101,8 +104,14 @@ function CalendarEvents({ userName }) {
       }
     } catch (error) {
       console.error("Error: Joining calender component event", error);
+    } finally {
+      setIsLoading(false);
     }
   };
+
+  if (isLoading) {
+    return <LoadingState/>
+  }
 
   return (
     <div className="CalendarEvents">
