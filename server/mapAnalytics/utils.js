@@ -1,6 +1,15 @@
 const ROWS = 20;
 const COLS = 20;
 
+export const mapBorder = {
+  polygon: [
+    { lat: 37.48188439982738, lng: -122.15137870228908 },
+    { lat: 37.480519446100864, lng: -122.15077332026456 },
+    { lat: 37.47982552151212, lng: -122.16782010873156 },
+    { lat: 37.48215891264268, lng: -122.16750300387568 },
+  ],
+};
+
 export function convertBorder(polygon) {
   let lats = polygon.map((point) => point.lat);
   let longs = polygon.map((point) => point.lng);
@@ -37,7 +46,7 @@ export function createGrid(border) {
   return cells;
 }
 
-export function checkPoint(point, cell) {
+export function checkPointWithinBoundary(point, cell) {
   const { mapLat, mapLong } = point;
   const { minLat, maxLat, minLng, maxLng } = cell.bounds;
 
@@ -144,9 +153,25 @@ function haverstineEquation(dataPoint1, dataPoint2) {
   return R * c;
 }
 
+function getBorderPoints(grid) {
+  const borderCells = [];
+  for (const cell of grid) {
+    if (
+      cell.row === 0 ||
+      cell.col === 0 ||
+      cell.row === ROWS - 1 ||
+      cell.col === COLS - 1
+    ) {
+      borderCells.push(cell);
+    }
+  }
+  return borderCells;
+}
+
 export function getLowestPopulation(grid, clusters) {
   const index = (row, col) => row * COLS + col;
   const skipSet = new Set();
+  const borderPoints = getBorderPoints(grid);
 
   for (const cluster of clusters) {
     for (const cell of cluster.cells) {
@@ -162,7 +187,7 @@ export function getLowestPopulation(grid, clusters) {
   }
 
   const centroids = clusters.map(getCentroid);
-  let bestScore = -1;
+  let bestScore = Number.NEGATIVE_INFINITY;
   let bestCell = null;
 
   for (const cell of grid) {
@@ -174,16 +199,27 @@ export function getLowestPopulation(grid, clusters) {
       lng: (cell.bounds.minLng + cell.bounds.maxLng) / 2,
     };
 
-    let minDistance = 40000;
-    let maxDistance = 0;
-
+    let minCentroidDistance = Number.MAX_VALUE;
     for (const centroid of centroids) {
       const distance = haverstineEquation(cellCenter, centroid);
-      minDistance = Math.min(minDistance, distance);
-      maxDistance = Math.max(maxDistance, distance);
+      if (distance < minCentroidDistance) {
+        minCentroidDistance = distance;
+      }
     }
 
-    const score = minDistance / maxDistance;
+    let minBorderDistance = Number.MAX_VALUE;
+    for (const borderCell of borderPoints) {
+      const borderCenter = {
+        lat: (borderCell.bounds.minLat + borderCell.bounds.maxLat) / 2,
+        lng: (borderCell.bounds.minLng + borderCell.bounds.maxLng) / 2,
+      };
+      const distance = haverstineEquation(cellCenter, borderCenter);
+      if (distance < minBorderDistance) {
+        minBorderDistance = distance;
+      }
+    }
+
+    const score = minCentroidDistance * minBorderDistance;
     if (score > bestScore) {
       bestScore = score;
       bestCell = cell;
@@ -197,4 +233,31 @@ export function getLowestPopulation(grid, clusters) {
     lat: cellLat,
     lng: cellLng,
   };
+}
+
+export function groupUsersByGrid(locations, grid) {
+  const groupedUsers = [];
+
+  for (const loc of locations) {
+    for (const cell of grid) {
+      if (checkPointWithinBoundary(loc, cell)) {
+        const center = {
+          lat: (cell.bounds.minLat + cell.bounds.maxLat) / 2,
+          lng: (cell.bounds.minLng + cell.bounds.maxLng) / 2,
+        };
+
+        const existing = groupedUsers.find(
+          (g) => g.lat === center.lat && g.lng === center.lng
+        );
+
+        if (existing) {
+          existing.users.push(loc);
+        } else {
+          groupedUsers.push({ lat: center.lat, lng: center.lng, users: [loc] });
+        }
+        break;
+      }
+    }
+  }
+  return groupedUsers;
 }

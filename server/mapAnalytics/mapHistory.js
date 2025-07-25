@@ -5,18 +5,10 @@ const prisma = new PrismaClient();
 const {
   convertBorder,
   createGrid,
-  checkPoint,
+  checkPointWithinBoundary,
   getNeighborIndices,
+  mapBorder,
 } = require("./utils");
-
-const mapBorder = {
-  polygon: [
-    { lat: 37.48188439982738, lng: -122.15137870228908 },
-    { lat: 37.480519446100864, lng: -122.15077332026456 },
-    { lat: 37.47982552151212, lng: -122.16782010873156 },
-    { lat: 37.48215891264268, lng: -122.16750300387568 },
-  ],
-};
 
 router.post("/checkCellLocation", async (req, res) => {
   const COLS = 20;
@@ -36,11 +28,11 @@ router.post("/checkCellLocation", async (req, res) => {
       const day = date.getUTCDay();
 
       for (const cell of grid) {
-        if (checkPoint(loc, cell)) {
+        if (checkPointWithinBoundary(loc, cell)) {
           cell.totalCount += 1;
           if (!cell.totalLocations) cell.totalLocations = [];
           cell.totalLocations.push(loc);
-          if (checkPoint(clickedPoint, cell)) {
+          if (checkPointWithinBoundary(clickedPoint, cell)) {
             dayCounts[day]++;
           }
           break;
@@ -48,7 +40,9 @@ router.post("/checkCellLocation", async (req, res) => {
       }
     }
 
-    const matchingCell = grid.find((cell) => checkPoint(clickedPoint, cell));
+    const matchingCell = grid.find((cell) =>
+      checkPointWithinBoundary(clickedPoint, cell)
+    );
     const neighbors = getNeighborIndices(matchingCell);
     const allCells = [
       matchingCell,
@@ -56,7 +50,7 @@ router.post("/checkCellLocation", async (req, res) => {
     ];
 
     const overallTotalCount = locations.filter((loc) =>
-      allCells.some((cell) => checkPoint(loc, cell))
+      allCells.some((cell) => checkPointWithinBoundary(loc, cell))
     ).length;
 
     res.json({
