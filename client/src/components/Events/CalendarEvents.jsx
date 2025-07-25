@@ -74,7 +74,7 @@ function CalendarEvents({ userName }) {
       setNextDays([]);
       setSlideDirection(null);
       setIsSliding(false);
-    }, 1500)
+    }, 1500);
   };
 
   const handleJoin = async (eventId) => {
@@ -110,7 +110,7 @@ function CalendarEvents({ userName }) {
   };
 
   if (isLoading) {
-    return <LoadingState/>
+    return <LoadingState />;
   }
 
   return (
@@ -122,7 +122,9 @@ function CalendarEvents({ userName }) {
               {currentDays.map(({ day, date }) => (
                 <div className="day" key={date}>
                   <div className="dayTitle">{day}</div>
-                  <button onClick={() => setSelectedDate(date)}>Show Events</button>
+                  <button onClick={() => setSelectedDate(date)}>
+                    Show Events
+                  </button>
                 </div>
               ))}
             </div>
@@ -169,14 +171,15 @@ function CalendarEvents({ userName }) {
           ) : (
             <div className="timelineContainer">
               <div className="timelineLine"></div>
-              {[...filteredEvents].sort((a,b) => new Date(a.eventDate) - new Date(b.eventDate))
-              .map((event) => (
-                <EventCard
-                  event={event}
-                  userName={userName}
-                  onJoin={handleJoin}
-                />
-              ))}
+              {[...filteredEvents]
+                .sort((a, b) => new Date(a.eventDate) - new Date(b.eventDate))
+                .map((event) => (
+                  <EventCard
+                    event={event}
+                    userName={userName}
+                    onJoin={handleJoin}
+                  />
+                ))}
             </div>
           )
         ) : (

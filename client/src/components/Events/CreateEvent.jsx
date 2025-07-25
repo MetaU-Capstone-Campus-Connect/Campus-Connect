@@ -59,12 +59,12 @@ function CreateEvent({ userName }) {
     } catch (error) {
       console.error("ERROR: Creating a new event ", error);
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
   };
 
   if (isLoading) {
-    return <LoadingState/>
+    return <LoadingState />;
   }
 
   return (

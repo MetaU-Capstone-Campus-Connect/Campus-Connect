@@ -36,7 +36,8 @@ function EventCard({ event, userName, onJoin }) {
                 <b>Group Host:</b> {event.eventGroups[0].groupName}
               </p>
             )}
-            {event.eventGroups?.length === 0 && event.eventUsers?.length > 0 && (
+            {event.eventGroups?.length === 0 &&
+              event.eventUsers?.length > 0 && (
                 <p>
                   <b>User Host:</b> {event.eventHost}
                 </p>
