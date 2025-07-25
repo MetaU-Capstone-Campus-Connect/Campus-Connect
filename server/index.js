@@ -5,12 +5,12 @@ const cors = require("cors");
 const PORT = 3000;
 const users = require("./routes/users");
 const auth = require("./routes/auth");
-const map = require("./routes/map")
-const groups = require("./routes/groups")
-const events = require("./routes/events")
+const map = require("./routes/map");
+const groups = require("./routes/groups");
+const events = require("./routes/events");
 const scoreEvents = require("./recommendEvents/scoreEvents");
-const mapAnalytics = require("./mapAnalytics/gridCluster")
-const mapHistory = require("./mapAnalytics/mapHistory")
+const mapAnalytics = require("./mapAnalytics/gridCluster");
+const mapHistory = require("./mapAnalytics/mapHistory");
 app.use(express.json());
 
 app.use(
@@ -35,10 +35,10 @@ app.use(
 app.use("/", users);
 app.use("/", auth);
 app.use("/", map);
-app.use("/", groups)
-app.use("/", events)
+app.use("/", groups);
+app.use("/", events);
 app.use("/", scoreEvents);
-app.use("/", mapAnalytics)
+app.use("/", mapAnalytics);
 app.use("/", mapHistory);
 
 app.listen(PORT, () => {

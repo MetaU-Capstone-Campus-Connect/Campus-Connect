@@ -1,5 +1,4 @@
 import "../Home/css/Login.css";
-import Footer from "../Footer";
 import { Link, useNavigate } from "react-router";
 import { useState } from "react";
 import LoadingState from "../LoadingState";
@@ -44,7 +43,7 @@ function Login({ setUserName, setUserInfo }) {
   };
 
   if (isLoading) {
-    return <LoadingState/>
+    return <LoadingState />;
   }
 
   return (
@@ -90,7 +89,6 @@ function Login({ setUserName, setUserInfo }) {
             </div>
           </div>
         </form>
-        <Footer />
       </div>
     </>
   );

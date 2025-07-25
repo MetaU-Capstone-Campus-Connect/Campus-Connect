@@ -41,7 +41,7 @@ function ManageProfileBanner({ userInfo, setBannerUrl }) {
   };
 
   if (isLoading) {
-    return <LoadingState/>
+    return <LoadingState />;
   }
 
   return (

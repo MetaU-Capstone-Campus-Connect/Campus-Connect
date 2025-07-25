@@ -31,7 +31,7 @@ function MyEvents({ userName }) {
   }, [userName]);
 
   if (isLoading) {
-    return <LoadingState/>
+    return <LoadingState />;
   }
 
   return (

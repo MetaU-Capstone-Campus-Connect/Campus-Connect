@@ -1,6 +1,5 @@
 import "../User/css/UserProfile.css";
 import Header from "../Header";
-import Footer from "../Footer";
 import Manage from "./Manage";
 import UserGroups from "./UserGroups";
 import UserEvents from "./UserEvents";
@@ -8,11 +7,6 @@ import { useState } from "react";
 import formatDatetime from "../../utils";
 
 function UserProfile({ userInfo, userName }) {
-  if (!userInfo) {
-    return <div>LOADING...</div>;
-    // Add error page component
-  }
-
   const [bannerUrl, setBannerUrl] = useState(userInfo.userProfileBanner);
   const [profileUrl, setProfileUrl] = useState(userInfo.userProfileImg);
   const [status, setStatus] = useState(userInfo.userStatus);
@@ -22,7 +16,6 @@ function UserProfile({ userInfo, userName }) {
     <>
       <Header />
       <div className="UserProfile">
-        {/* LEFT SIDE OF SITE*/}
         <div className="userInfoColumn">
           <div className="manageProfile">
             <Manage
@@ -39,10 +32,8 @@ function UserProfile({ userInfo, userName }) {
           </div>
         </div>
 
-        {/* RIGHT SIDE OF SITE */}
         <div className="userInfoRow">
           <div className="userNameTitle">{userInfo.userName}</div>
-          {/* IMGS, BIO, STATUS OF SITE */}
           <div className="userInfoUpper">
             <div className="userPics">
               <div className="bannerImg">
@@ -71,7 +62,6 @@ function UserProfile({ userInfo, userName }) {
             <div className="userName"></div>
           </div>
 
-          {/* GROUPS & ACTIVITY OF USER */}
           <div className="userInfoLower">
             <div className="userGroups">
               <h2>Groups</h2>
@@ -83,7 +73,6 @@ function UserProfile({ userInfo, userName }) {
             </div>
           </div>
         </div>
-        <Footer />
       </div>
     </>
   );

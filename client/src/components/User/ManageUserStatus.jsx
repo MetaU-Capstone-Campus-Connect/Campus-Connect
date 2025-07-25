@@ -38,7 +38,7 @@ function ManageUserStatus({ userInfo, setStatus }) {
   };
 
   if (isLoading) {
-    return <LoadingState/>
+    return <LoadingState />;
   }
 
   return (

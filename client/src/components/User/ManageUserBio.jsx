@@ -40,7 +40,7 @@ function ManageUserBio({ userInfo, setAboutMe }) {
   };
 
   if (isLoading) {
-    return <LoadingState/>
+    return <LoadingState />;
   }
 
   return (

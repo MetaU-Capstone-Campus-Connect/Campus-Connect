@@ -1,5 +1,5 @@
-const ROWS = 20;
-const COLS = 20;
+export const ROWS = 20;
+export const COLS = 20;
 
 export const mapBorder = {
   polygon: [

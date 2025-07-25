@@ -58,7 +58,7 @@ function RecommendedEvents({ userName }) {
   };
 
   if (isLoading) {
-    return <LoadingState/>
+    return <LoadingState />;
   }
 
   return (

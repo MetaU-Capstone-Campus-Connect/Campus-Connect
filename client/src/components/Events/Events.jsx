@@ -1,11 +1,10 @@
 import { useState } from "react";
 import "../Events/css/Events.css";
 import Header from "../Header";
-import Footer from "../Footer";
 import CalendarEvents from "./CalendarEvents";
 import RecommendedEvents from "./RecommendedEvents";
 import MyEvents from "./MyEvents";
-import CreateEvent from './CreateEvent';
+import CreateEvent from "./CreateEvent";
 
 function Events({ userName }) {
   const [viewMode, setViewMode] = useState("calendar");
@@ -25,7 +24,7 @@ function Events({ userName }) {
     <div className="Events">
       <Header />
       <div className="eventManager">
-        <CreateEvent userName={userName}/>
+        <CreateEvent userName={userName} />
         <button onClick={() => setViewMode("calendar")}>Calendar View</button>
 
         <button onClick={() => setViewMode("recommended")}>
@@ -34,9 +33,7 @@ function Events({ userName }) {
 
         <button onClick={() => setViewMode("myEvents")}>My Events</button>
       </div>
-
       {renderView()}
-      <Footer />
     </div>
   );
 }

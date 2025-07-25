@@ -1,5 +1,4 @@
 import "../Home/css/SignUp.css";
-import Footer from "../Footer";
 import { Link, useNavigate } from "react-router";
 import { useState } from "react";
 import LoadingState from "../LoadingState";
@@ -51,7 +50,7 @@ function SignUp({ setUserName, setUserInfo }) {
   };
 
   if (isLoading) {
-    return <LoadingState/>
+    return <LoadingState />;
   }
 
   return (
@@ -110,7 +109,6 @@ function SignUp({ setUserName, setUserInfo }) {
             </div>
           </div>
         </form>
-        <Footer />
       </div>
     </>
   );

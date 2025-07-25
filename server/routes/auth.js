@@ -116,20 +116,20 @@ router.post("/users/login", async (req, res) => {
 
 // VERIFY (GET) -> CHECK USER IF IN SESSION
 router.get("/verify", async (req, res) => {
-if (!req.session.user) {
-    return res.status(401).json({ message: "user is not logged in"})
-}
-try {
+  if (!req.session.user) {
+    return res.status(401).json({ message: "user is not logged in" });
+  }
+  try {
     const loggedUser = await prisma.users.findUnique({
-        where: {
-            userName: req.session.user.userName
-        }
+      where: {
+        userName: req.session.user.userName,
+      },
     });
-    res.status(200).json({ user: loggedUser})
-} catch (error) {
-    console.error("Failed to verify user")
-    res.status(500).json({message: "Server error verifying user"})
-}
+    res.status(200).json({ user: loggedUser });
+  } catch (error) {
+    console.error("Failed to verify user");
+    res.status(500).json({ message: "Server error verifying user" });
+  }
 });
 
 // LOGOUT (POST) -> LOGS USER OUT FROM USER SESSION

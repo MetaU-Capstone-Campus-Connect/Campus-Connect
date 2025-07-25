@@ -1,5 +1,6 @@
 .userHoverContainer {
     position: relative;
+    cursor: pointer;
 }
 
 .userHoverPreview {
@@ -12,6 +13,7 @@
     padding: 15px;
     border-radius: 5px;
     text-align: center;
+    cursor: pointer;
 }
 
 .userHoverBottomDiv {
