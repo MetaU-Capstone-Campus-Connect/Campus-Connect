@@ -17,7 +17,7 @@ function UserGroups({ userName }) {
     } catch (error) {
       console.error("Error fetching user groups:", error);
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
   };
 
@@ -26,7 +26,7 @@ function UserGroups({ userName }) {
   }, []);
 
   if (isLoading) {
-    return <LoadingState/>
+    return <LoadingState />;
   }
 
   return (

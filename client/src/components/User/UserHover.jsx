@@ -7,13 +7,11 @@ function UserHover({ userName, children }) {
   const [userData, setUserData] = useState(null);
 
   useEffect(() => {
-    if (hovering && userName) {
+    if (hovering && userName && userData == null) {
       fetch(`http://localhost:3000/users/${userName}`)
         .then((res) => res.json())
         .then((data) => setUserData(data))
         .catch((err) => console.error("Error: Fetching user data", err));
-    } else {
-      setUserData(null);
     }
   }, [hovering, userName]);
 

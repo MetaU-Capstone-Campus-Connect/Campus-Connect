@@ -16,7 +16,7 @@ function ManageProfileImg({ userInfo, setProfileUrl }) {
   };
 
   const handleUpdate = async (event) => {
-    setIsLoading(true)
+    setIsLoading(true);
     event.preventDefault();
     const imgURL = event.target.imgURL.value;
     try {
@@ -40,7 +40,7 @@ function ManageProfileImg({ userInfo, setProfileUrl }) {
   };
 
   if (isLoading) {
-    return <LoadingState/>
+    return <LoadingState />;
   }
 
   return (

@@ -26,7 +26,7 @@ function UserEvents({ userName }) {
   }, []);
 
   if (isLoading) {
-    return <LoadingState/>
+    return <LoadingState />;
   }
 
   return (
