@@ -37,10 +37,10 @@
 
 .highestPopulatedMarker {
     color: green;
-    font-size: 3rem;
+    font-size: 2rem;
 }
 
 .leastPopulatedMarker {
     color: orangered;
-    font-size: 3rem;
+    font-size: 2rem;
 }

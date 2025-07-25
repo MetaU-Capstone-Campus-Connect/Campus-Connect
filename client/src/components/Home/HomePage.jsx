@@ -108,19 +108,24 @@ function HomePage({ userName }) {
   };
 
   const isInsideCluster = (lat, lng) => {
-    const bounds = highLowLocations?.biggestCluster?.cells?.[0]?.bounds;
-    if (!bounds) return false;
-    return (
-      lat >= bounds.minLat &&
-      lat <= bounds.maxLat &&
-      lng >= bounds.minLng &&
-      lng <= bounds.maxLng
-    );
+    const cells = highLowLocations?.biggestCluster?.cells;
+    if (!cells || cells.length === 0) return false;
+
+    return cells.some((cell) => {
+      const bounds = cell.bounds;
+      return (
+        lat >= bounds.minLat &&
+        lat <= bounds.maxLat &&
+        lng >= bounds.minLng &&
+        lng <= bounds.maxLng
+      );
+    });
   };
 
   const clusteredUsers = allLocations.filter((loc) =>
     isInsideCluster(loc.mapLat, loc.mapLong),
   );
+  const groupedUserMarkers = highLowLocations.groupedMarkers || [];
 
   if (isLoading) {
     return <LoadingState/>
@@ -129,9 +134,7 @@ function HomePage({ userName }) {
   return (
     <>
       <Header userName={userName} />
-      <div className="homePageWelcome">
-        Welcome Back, {userName}
-      </div>
+      <div className="homePageWelcome">Welcome Back, {userName}</div>
 
       <div className="setLocationButton">
         <SetLocation userName={userName} getLocations={getLocations} />
@@ -149,41 +152,38 @@ function HomePage({ userName }) {
             mapId={apiMapId}
             onClick={handleMapClick}
           >
-            {allLocations
-              .filter(
-                (location) =>
-                  !isInsideCluster(location.mapLat, location.mapLong),
-              )
-              .map((location) => (
-                <div key={location.mapId}>
-                  <AdvancedMarker
-                    position={{
-                      lat: location.mapLat,
-                      lng: location.mapLong,
-                    }}
-                    onClick={() => handleOpen(location.mapId)}
+            {groupedUserMarkers.map((group, index) => (
+              <div className="activeUserMarkers">
+                <AdvancedMarker
+                  position={{ lat: group.lat, lng: group.lng }}
+                  onClick={() => handleOpen(index)}
+                >
+                  <div className="userPin">
+                    <i
+                      className={`fa ${
+                        group.users.length > 1 ? "fa-users" : "fa-user"
+                      }`}
+                    />
+                  </div>
+                </AdvancedMarker>
+                {open === index && (
+                  <InfoWindow
+                    position={{ lat: group.lat, lng: group.lng }}
+                    onCloseClick={() => handleOpen(null)}
                   >
-                    <div className="userPin">
-                      <i className="fa fa-user"></i>
+                    <div className="userPopUp">
+                      {group.users.map((user) => (
+                        <div>
+                          <h1>{user.mapUserName}</h1>
+                          <p>Location Set: {showTime(user.createTime)}</p>
+                          <p>Status Message: {user.message}</p>
+                       </div>
+                      ))}
                     </div>
-                  </AdvancedMarker>
-                  {open === location.mapId && (
-                    <InfoWindow
-                      position={{
-                        lat: location.mapLat,
-                        lng: location.mapLong,
-                      }}
-                      onCloseClick={() => handleOpen(null)}
-                    >
-                      <div className="userPopUp">
-                        <h1>{location.mapUserName}</h1>
-                        <p>Location Set: {showTime(location.createTime)}</p>
-                        <p>Status Message: {location.message}</p>
-                      </div>
-                    </InfoWindow>
-                  )}
-                </div>
-              ))}
+                  </InfoWindow>
+                )}
+              </div>
+            ))}
             {highLowLocations.highestPopulated && clusteredUsers.length > 0 && (
               <AdvancedMarker
                 position={highLowLocations.highestPopulated}
@@ -217,8 +217,7 @@ function HomePage({ userName }) {
                 <div className="leastPopulatedMarker">
                   <i className="fa fa-map-pin"></i>
                 </div>
-                {lowestPopulationOpen &&
-                (
+                {lowestPopulationOpen && (
                   <InfoWindow
                     position={highLowLocations.leastPopulated}
                     onCloseClick={() => setLowestPopulationOpen(false)}

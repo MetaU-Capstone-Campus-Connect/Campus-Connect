@@ -25,7 +25,7 @@ const BarChart = ({ counts }) => {
         labels: dayLabels,
         datasets: [
           {
-            label: "Past User's",
+            label: "Past Users",
             data: counts,
             backgroundColor: "#3148F6",
             borderColor: "#1C4B8F",
