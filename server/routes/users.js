@@ -16,9 +16,9 @@ router.get("/users/:name", async (req, res) => {
         members: {
           include: {
             group: true,
-          }
-        }
-      }
+          },
+        },
+      },
     });
     res.json(user);
   } catch (error) {

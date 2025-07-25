@@ -54,9 +54,13 @@ router.delete("/deleteLocation", async (req, res) => {
   try {
     const { mapUserName } = req.body;
 
-    const deleteLocation = await prisma.map.delete({
+    await prisma.map.updateMany({
       where: {
         mapUserName,
+        status: "ACTIVE",
+      },
+      data: {
+        status: "PAST",
       },
     });
     return res.status(200).json({ message: "Delete user location" });
