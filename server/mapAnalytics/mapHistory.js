@@ -8,10 +8,10 @@ const {
   checkPointWithinBoundary,
   getNeighborIndices,
   mapBorder,
+  COLS,
 } = require("./utils");
 
 router.post("/checkCellLocation", async (req, res) => {
-  const COLS = 20;
   try {
     const { mapLat, mapLong } = req.body;
     const clickedPoint = { mapLat, mapLong };
@@ -54,7 +54,7 @@ router.post("/checkCellLocation", async (req, res) => {
     ).length;
 
     res.json({
-      percentage: overallTotalCount / locations.length,
+      percentage: overallTotalCount / locations.length || 0,
       dayCounts,
     });
   } catch (error) {
