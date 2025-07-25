@@ -43,7 +43,7 @@ function CreateGroup({ userName, refreshGroups }) {
   };
 
   if (isLoading) {
-    return <LoadingState/>
+    return <LoadingState />;
   }
 
   return (

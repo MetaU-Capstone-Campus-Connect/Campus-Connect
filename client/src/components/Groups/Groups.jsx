@@ -1,7 +1,6 @@
 import "../Groups/css/Groups.css";
 import { useEffect, useState } from "react";
 import Header from "../Header";
-import Footer from "../Footer";
 import CreateGroup from "./CreateGroup";
 import AllGroups from "./AllGroups";
 import LoadingState from "../LoadingState";
@@ -66,7 +65,7 @@ function Groups({ userName }) {
   };
 
   if (isLoading) {
-    return <LoadingState/>
+    return <LoadingState />;
   }
 
   return (
@@ -133,8 +132,6 @@ function Groups({ userName }) {
           refreshGroups={fetchAllGroups}
         />
       </div>
-
-      <Footer />
     </div>
   );
 }

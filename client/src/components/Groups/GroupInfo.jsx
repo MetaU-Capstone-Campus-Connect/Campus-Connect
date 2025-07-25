@@ -46,7 +46,7 @@ function GroupInfo({ group, userName }) {
   };
 
   if (isLoading) {
-    return <LoadingState/>
+    return <LoadingState />;
   }
 
   return (
