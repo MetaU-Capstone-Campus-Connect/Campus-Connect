@@ -1,8 +1,21 @@
-export function scoreSimilarity(upcomingEvents, pastEvents) {
-  const upcomingSet = new Set(upcomingEvents.toLowerCase().split(/\s+/));
-  const pastSet = new Set(pastEvents.toLowerCase().split(/\s+/));
+import { removeStopwords } from "stopword";
 
-  const unionSet = new Set([...upcomingSet, pastSet]);
+function filterOutString(text) {
+  const words = text
+    .toLowerCase()
+    .replace(/[^\w\s]/g, "")
+    .split(/\s+/);
+  return removeStopwords(words);
+}
+
+export function scoreSimilarity(upcomingEvents, pastEvents) {
+  const upcomingWords = filterOutString(upcomingEvents);
+  const pastWords = filterOutString(pastEvents);
+
+  const upcomingSet = new Set(upcomingWords);
+  const pastSet = new Set(pastWords);
+
+  const unionSet = new Set([...upcomingSet, ...pastSet]);
   const intersecSet = new Set([...upcomingSet].filter((x) => pastSet.has(x)));
   const score = intersecSet.size / unionSet.size;
 

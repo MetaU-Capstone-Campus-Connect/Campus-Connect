@@ -16,7 +16,8 @@
     "express": "^5.1.0",
     "express-session": "^1.18.1",
     "express-sessions": "^1.0.6",
-    "pg": "^8.16.2"
+    "pg": "^8.16.2",
+    "stopword": "^3.1.5"
   },
   "devDependencies": {
     "prisma": "^6.10.1"
