@@ -1,6 +1,5 @@
 import "../Home/css/HomePage.css";
 import Header from "../Header";
-import Footer from "../Footer";
 import SetLocation from "./SetLocation";
 import BarChart from "./BarChart";
 import MapClickModal from "./MapClickModal";
@@ -128,7 +127,7 @@ function HomePage({ userName }) {
   const groupedUserMarkers = highLowLocations.groupedMarkers || [];
 
   if (isLoading) {
-    return <LoadingState/>
+    return <LoadingState />;
   }
 
   return (
@@ -177,7 +176,7 @@ function HomePage({ userName }) {
                           <h1>{user.mapUserName}</h1>
                           <p>Location Set: {showTime(user.createTime)}</p>
                           <p>Status Message: {user.message}</p>
-                       </div>
+                        </div>
                       ))}
                     </div>
                   </InfoWindow>
@@ -238,8 +237,6 @@ function HomePage({ userName }) {
         locationPercentage={locationPercentage}
       />
       <BarChart counts={dayCounts} />
-
-      <Footer />
     </>
   );
 }

@@ -52,11 +52,11 @@ function SetLocation({ userName, getLocations }) {
       const response = await fetch("http://localhost:3000/deleteLocation", {
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify( {mapUserName: user}),
+        body: JSON.stringify({ mapUserName: user }),
         credentials: "include",
       });
 
-      if (response){
+      if (response) {
         getLocations();
         handleClose();
       }
@@ -65,11 +65,11 @@ function SetLocation({ userName, getLocations }) {
     } finally {
       setIsLoading(false);
     }
-  }
+  };
 
   if (isLoading) {
-    return <LoadingState/>
-  };
+    return <LoadingState />;
+  }
 
   return (
     <div className="SetLocation">
@@ -91,7 +91,13 @@ function SetLocation({ userName, getLocations }) {
                 <button className="createButton" type="submit">
                   Set Location
                 </button>
-                <button className="deleteButton" type="button" onClick={() => deleteLocation(userName)}>Delete Location</button>
+                <button
+                  className="deleteButton"
+                  type="button"
+                  onClick={() => deleteLocation(userName)}
+                >
+                  Delete Location
+                </button>
               </div>
             </form>
           </div>
