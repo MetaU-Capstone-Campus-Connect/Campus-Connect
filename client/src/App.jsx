@@ -7,10 +7,27 @@ import Login from "./components/Home/Login";
 import UserProfile from "./components/User/UserProfile";
 import Groups from "./components/Groups/Groups";
 import Events from "./components/Events/Events";
+import WithAuth from "./WithAuth";
 
 function App() {
   const [userName, setUserName] = useState();
   const [userInfo, setUserInfo] = useState();
+
+  const ProtectedHomePage = WithAuth((props) => (
+    <HomePage {...props} userInfo={userInfo} userName={userName} />
+  ));
+
+  const ProtectedUserProfile = WithAuth((props) => (
+    <UserProfile {...props} userInfo={userInfo} userName={userName} />
+  ));
+
+  const ProtectedGroups = WithAuth((props) => (
+    <Groups {...props} userInfo={userInfo} userName={userName} />
+  ));
+
+  const ProtectedEvents = WithAuth((props) => (
+    <Events {...props} userInfo={userInfo} userName={userName} />
+  ));
 
   useEffect(() => {
     const checkSession = async () => {
@@ -22,9 +39,13 @@ function App() {
           const data = await response.json();
           setUserName(data.user.userName);
           setUserInfo(data.user);
+        } else {
+          setUserName(null);
+          setUserInfo(null);
         }
       } catch (error) {
         console.error("Error: Checking user session:");
+        setUserInfo(null);
       }
     };
     checkSession();
@@ -54,7 +75,7 @@ function App() {
             path="/home"
             element={
               <>
-                <HomePage userName={userName} />
+                <ProtectedHomePage userInfo={userInfo} userName={userName} />
               </>
             }
           />
@@ -62,7 +83,7 @@ function App() {
             path="/users/:name"
             element={
               <>
-                <UserProfile userInfo={userInfo} userName={userName} />
+                <ProtectedUserProfile userInfo={userInfo} userName={userName} />
               </>
             }
           />
@@ -70,7 +91,7 @@ function App() {
             path="/study-groups"
             element={
               <>
-                <Groups userName={userName} />
+                <ProtectedGroups userInfo={userInfo} userName={userName} />
               </>
             }
           />
@@ -78,7 +99,7 @@ function App() {
             path="/events"
             element={
               <>
-                <Events userName={userName} />
+                <ProtectedEvents userInfo={userInfo} userName={userName} />
               </>
             }
           />
