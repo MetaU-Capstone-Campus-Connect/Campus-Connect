@@ -28,7 +28,7 @@ across eight signals, then sums them into one weighted total:
 | Shared-group attendees | Attendees who share a group with the user |
 | Host affinity | How often the user has attended this host's events |
 | Day-of-week preference | Which days the user actually shows up |
-| Calendar availability | Conflicts against events already RSVP'd — a hard filter, not a penalty |
+| Calendar availability | Conflicts against events already RSVP'd, a hard filter rather than a penalty |
 
 Weights are not fixed. `getScoreWeight()` adjusts them based on how much history a user has
 and how large their groups are, so a new account with no attendance history leans on social
